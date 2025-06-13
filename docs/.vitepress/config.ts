@@ -94,6 +94,10 @@ export default defineConfig({
               text: "003-5_2.2.4 人事情報受信バッチ処理改修前後比較",
               link: "/guide/batch002",
             },
+            {
+              text: "✅人事情報バッチ詳細設計",
+              link: "/guide/batch003",
+            },
           ],
         },
         {
@@ -224,6 +228,54 @@ export default defineConfig({
           ],
         },
         {
+          text: "共通機能 開発",
+          collapsed: true,
+          items: [
+            {
+              text: "共通機能",
+              link: "/tutorial/kyo_tt",
+            },
+            {
+              text: "CSVUtilユーティリティ",
+              link: "/tutorial/kyo_csvutil",
+            },
+            {
+              text: "CSVReadUtilユーティリティ",
+              link: "/tutorial/kyo_CSVReadUtil",
+            },
+            {
+              text: "CSVWriterユーティリティ",
+              link: "/tutorial/kyo_CSVWriter",
+            },
+            {
+              text: "基底サービス",
+              link: "/tutorial/kyo_baseservice",
+            },
+          ],
+        },
+        {
+          text: "セキュリティー 開発",
+          collapsed: true,
+          items: [
+            {
+              text: "TokenValidateType",
+              link: "/tutorial/TokenValidateType",
+            },
+            {
+              text: "TokenHandler",
+              link: "/tutorial/TokenHandler",
+            },
+            {
+              text: "TokenManager",
+              link: "/tutorial/TokenManager",
+            },
+            {
+              text: "SecurityHandlerInterceptor",
+              link: "/tutorial/SecurityHandlerInterceptor",
+            },
+          ],
+        },
+        {
           text: "その他",
           collapsed: true,
           items: [
@@ -273,6 +325,7 @@ export default defineConfig({
               link: "/tutorial/test_properties",
             },
             { text: "pom.xml依存関係の更新", link: "/tutorial/test_pomxml" },
+            { text: "オブジェクト構成0.1", link: "/tutorial/kousei0.1" },
           ],
         },
         {
