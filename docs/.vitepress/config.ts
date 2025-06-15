@@ -95,8 +95,12 @@ export default defineConfig({
               link: "/guide/batch002",
             },
             {
-              text: "✅人事情報バッチ詳細設計",
+              text: "✅人事情報バッチ詳細設計01",
               link: "/guide/batch003",
+            },
+            {
+              text: "✅人事情報バッチ詳細設計02",
+              link: "/guide/batch004",
             },
           ],
         },
@@ -276,6 +280,46 @@ export default defineConfig({
           ],
         },
         {
+          text: "認証サービス 開発",
+          collapsed: true,
+          items: [
+            {
+              text: "LoginUserModel",
+              link: "/tutorial/LoginUserModel",
+            },
+            {
+              text: "Constants",
+              link: "/tutorial/Constants",
+            },
+            {
+              text: "LabelValueModel",
+              link: "/tutorial/LabelValueModel",
+            },
+            {
+              text: "AppCommonMapper",
+              link: "/tutorial/AppCommonMapper",
+            },
+            {
+              text: "AuthService",
+              link: "/tutorial/AuthService",
+            },
+          ],
+        },
+        {
+          text: "開発詳細ページ群",
+          collapsed: true,
+          items: [
+            {
+              text: "BatchSettings",
+              link: "/tutorial/BatchSettings",
+            },
+            {
+              text: "environment.properties",
+              link: "/tutorial/environment.properties",
+            },
+          ],
+        },
+        {
           text: "その他",
           collapsed: true,
           items: [
@@ -388,7 +432,7 @@ export default defineConfig({
           text: "記事",
           collapsed: true,
           items: [
-            { text: "ゴール", link: "/posts/memo" },
+            { text: "bean登録問題解決", link: "/posts/error_01" },
             {
               text: "Next.js で買い物サイトを作る",
               link: "/posts/hello-react",
