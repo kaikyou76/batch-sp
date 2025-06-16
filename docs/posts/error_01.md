@@ -229,7 +229,7 @@ OutputErrFileNm=system_error
 
 1. **ErrorFileManager ビーンの定義追加**:
 
-#### (src/main/java/com/example/orgchart_api/batch/util/ErrorFileManager.java)
+#### (src/main/java/com/example/orgchart_api/config/BatchConfig.java)
 
 ```java
 @Bean

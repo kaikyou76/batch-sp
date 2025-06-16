@@ -102,6 +102,22 @@ export default defineConfig({
               text: "✅人事情報バッチ詳細設計02",
               link: "/guide/batch004",
             },
+            {
+              text: "✅人事情報バッチ詳細設計03",
+              link: "/guide/batch005",
+            },
+            {
+              text: "✅人事情報バッチ詳細設計04",
+              link: "/guide/batch006",
+            },
+            {
+              text: "✅人事情報バッチ詳細設計05",
+              link: "/guide/batch007",
+            },
+            {
+              text: "✅人事情報バッチ詳細設計06",
+              link: "/guide/batch008",
+            },
           ],
         },
         {
@@ -197,21 +213,7 @@ export default defineConfig({
         {
           text: "チュートリアル",
           collapsed: true,
-          items: [
-            { text: "DC-001", link: "/tutorial/react-basics" },
-            { text: "CG-001", link: "/tutorial/nextjs-project" },
-            { text: "DC-002", link: "/tutorial/dc2" },
-            { text: "cg-002", link: "/tutorial/cg2" },
-            { text: "メモ―", link: "/tutorial/memeomeimo" },
-            { text: "メモ―2", link: "/tutorial/memo2" },
-            { text: "メモ―3", link: "/tutorial/memo3" },
-            { text: "メモ―3追加女神", link: "/tutorial/memo3_2" },
-            { text: "メモ―4", link: "/tutorial/memo4" },
-            { text: "天坑水库监狱", link: "/tutorial/memo5" },
-            { text: "DeekSeek-R1", link: "/tutorial/dcr1" },
-            { text: "DeekSeek-V3", link: "/tutorial/dcv3" },
-            { text: "chatGPT-Zo", link: "/tutorial/cgzo" },
-          ],
+          items: [{ text: "天坑水库监狱", link: "/tutorial/memo5" }],
         },
         {
           text: "trn_user 開発",
@@ -256,6 +258,11 @@ export default defineConfig({
               link: "/tutorial/kyo_baseservice",
             },
           ],
+        },
+        {
+          text: "バッチ開発",
+          collapsed: true,
+          items: [{ text: "挙動確認", link: "/tutorial/batch_kakunin" }],
         },
         {
           text: "セキュリティー 開発",
@@ -309,6 +316,10 @@ export default defineConfig({
           text: "開発詳細ページ群",
           collapsed: true,
           items: [
+            {
+              text: "BatchConfig",
+              link: "/tutorial/BatchConfig",
+            },
             {
               text: "BatchSettings",
               link: "/tutorial/BatchSettings",
@@ -434,8 +445,8 @@ export default defineConfig({
           items: [
             { text: "bean登録問題解決", link: "/posts/error_01" },
             {
-              text: "Next.js で買い物サイトを作る",
-              link: "/posts/hello-react",
+              text: "プロパティの連携",
+              link: "/posts/properties_settings",
             },
           ],
         },
