@@ -58,6 +58,45 @@ export default defineConfig({
     ],
 
     sidebar: {
+      "/code/": [
+        {
+          text: "フロントエンド設定",
+          collapsed: false,
+          items: [
+            { text: "環境変数設定ファイル", link: "/code/kankyou" },
+            { text: "Tailwind CSSセットアップ", link: "/code/css" },
+          ],
+        },
+        {
+          text: "バックエンド設定",
+          collapsed: false,
+          items: [
+            {
+              text: "（Cloudflare Workers）設定",
+              link: "/code/setting",
+            },
+            { text: "環境変数設定", link: "/code/bk_kankyou" },
+            { text: "バックエンドルート設定", link: "/code/route" },
+            { text: "テスト環境の設定", link: "/code/jesttest" },
+            { text: "Vitestテスト環境の設定", link: "/code/vitest" },
+          ],
+        },
+        {
+          text: "プロジェクト設定",
+          collapsed: false,
+          items: [
+            { text: ".gitignore設定", link: "/code/anzen" },
+            { text: "修正内容デプロイ手順", link: "/code/deburoi" },
+            { text: "Vercel環境変数設定", link: "/code/v_kankyou" },
+            { text: "Render環境変数設定", link: "/code/r_kankyou" },
+            { text: "Maven の高速実行ツール", link: "/code/MavenDaemon" },
+            { text: "pom.xml依存関係解決", link: "/code/pom" },
+            { text: "データベース削除", link: "/code/db_delete" },
+            { text: "データベーススキーマ取得", link: "/code/db_schema" },
+            { text: "pg_adminセキュリティー", link: "/code/pg_admin" },
+          ],
+        },
+      ],
       "/guide/": [
         {
           text: "改修企画案",
@@ -213,7 +252,7 @@ export default defineConfig({
         {
           text: "チュートリアル",
           collapsed: true,
-          items: [{ text: "天坑水库监狱", link: "/tutorial/memo5" }],
+          items: [{ text: "高速な Maven 実行", link: "/tutorial/mvnd_tool" }],
         },
         {
           text: "trn_user 開発",
@@ -262,7 +301,29 @@ export default defineConfig({
         {
           text: "バッチ開発",
           collapsed: true,
-          items: [{ text: "挙動確認", link: "/tutorial/batch_kakunin" }],
+          items: [
+            {
+              text: "メタデータテーブルの作成",
+              link: "/tutorial/batch_kakunin01",
+            },
+            { text: "挙動確認", link: "/tutorial/batch_kakunin" },
+            { text: "job実行問題について", link: "/tutorial/batch_kakunin02" },
+            { text: "job実行問題解決", link: "/tutorial/batch_kakunin03" },
+            {
+              text: "job実行問題解決最新版",
+              link: "/tutorial/batch_kakunin04",
+            },
+          ],
+        },
+        {
+          text: "SQL文の練習",
+          collapsed: true,
+          items: [
+            {
+              text: "参照制約の状態を確認",
+              link: "/tutorial/batch_sql01",
+            },
+          ],
         },
         {
           text: "セキュリティー 開発",
@@ -507,43 +568,6 @@ export default defineConfig({
               text: "11. 📝 管理ログ（Admin Logs）API開発",
               link: "/about/api11",
             },
-          ],
-        },
-      ],
-      "/code/": [
-        {
-          text: "フロントエンド設定",
-          collapsed: false,
-          items: [
-            { text: "環境変数設定ファイル", link: "/code/kankyou" },
-            { text: "Tailwind CSSセットアップ", link: "/code/css" },
-          ],
-        },
-        {
-          text: "バックエンド設定",
-          collapsed: false,
-          items: [
-            {
-              text: "（Cloudflare Workers）設定",
-              link: "/code/setting",
-            },
-            { text: "環境変数設定", link: "/code/bk_kankyou" },
-            { text: "バックエンドルート設定", link: "/code/route" },
-            { text: "テスト環境の設定", link: "/code/jesttest" },
-            { text: "Vitestテスト環境の設定", link: "/code/vitest" },
-          ],
-        },
-        {
-          text: "プロジェクト設定",
-          collapsed: false,
-          items: [
-            { text: ".gitignore設定", link: "/code/anzen" },
-            { text: "修正内容デプロイ手順", link: "/code/deburoi" },
-            { text: "Vercel環境変数設定", link: "/code/v_kankyou" },
-            { text: "Render環境変数設定", link: "/code/r_kankyou" },
-            { text: "Maven の高速実行ツール", link: "/code/MavenDaemon" },
-            { text: "pom.xml依存関係解決", link: "/code/pom" },
-            { text: "データベース削除", link: "/code/db_delete" },
           ],
         },
       ],

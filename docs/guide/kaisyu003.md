@@ -83,14 +83,18 @@ CREATE TABLE public.mst_cucm_pickup_group (
     pickup_group_nm VARCHAR(19) NOT NULL,
     pickup_group_no INT NOT NULL,
     branch_cd VARCHAR(3) NOT NULL,
-    section_cd VARCHAR(5) NOT NULL,
+    section_id INTEGER NOT NULL, -- 型をINTEGERに変更
     create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+
     CONSTRAINT mst_cucm_pickup_group_pickup_group_nm_key UNIQUE (pickup_group_nm),
     CONSTRAINT fk_pickup_group_branch
         FOREIGN KEY (branch_cd)
-        REFERENCES public.mst_branch(branch_cd)
+        REFERENCES public.mst_branch(branch_cd),
+    CONSTRAINT fk_pickup_group_section
+        FOREIGN KEY (section_id) -- section_idを参照
+        REFERENCES public.mst_section(section_id) -- 正しい参照先
 );
 
 -- CUCMソフトキーテンプレートマスタ
@@ -130,96 +134,206 @@ CREATE TABLE public.mst_shared_nm (
 -- 組織ビジネステーブル（tmp_integratedid_organization → biz_organization）
 CREATE TABLE public.biz_organization (
     organization_id SERIAL PRIMARY KEY,
-    organization_cd VARCHAR(19) NOT NULL,
-    organization_nm VARCHAR(60) NOT NULL,
-    parent_organization_cd VARCHAR(19) NOT NULL,
-    print_order VARCHAR(4) NOT NULL,
-    -- 設計書要件の監査カラム追加
+    organization_cd VARCHAR(17) NOT NULL,
+    organization_nm VARCHAR(100) NOT NULL,
+    organization_no VARCHAR(7) NOT NULL,
+    organization_abbreviated_nm VARCHAR(50) NOT NULL,
+    print_order INTEGER NOT NULL,           -- 数値型に変更
+    class_sales VARCHAR(2) NOT NULL,
+    class_data_input VARCHAR(2) NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE,  -- タイムスタンプ型に変換
     create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
-    CONSTRAINT biz_organization_organization_cd_key
-        UNIQUE (organization_cd)
+    CONSTRAINT biz_organization_unique_key UNIQUE (organization_cd)
 );
 
 -- 組織ステージングテーブル（tmp_organization → stg_organization）
 CREATE TABLE public.stg_organization (
     organization_id SERIAL PRIMARY KEY,
-    organization_cd VARCHAR(19) NOT NULL,
-    organization_nm VARCHAR(60) NOT NULL,
-    parent_organization_cd VARCHAR(19) NOT NULL,
-    print_order VARCHAR(4) NOT NULL,
+    organization_cd VARCHAR(17) NOT NULL,  -- CSVの最大長に合わせて17桁
+    organization_nm VARCHAR(100) NOT NULL,  -- 組織名の最大長を拡張
+    organization_no VARCHAR(7) NOT NULL,   -- CSVの組織番号
+    organization_abbreviated_nm VARCHAR(50) NOT NULL,  -- 組織略称
+    print_order INTEGER NOT NULL,
+    class_sales VARCHAR(2) NOT NULL,       -- 営業区分
+    class_data_input VARCHAR(2) NOT NULL,   -- データ入力区分
+    update_date VARCHAR(14) NOT NULL,        -- CSV形式のまま
     create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
-    CONSTRAINT stg_organization_organization_cd_key
-        UNIQUE (organization_cd)
+    CONSTRAINT stg_organization_unique_key UNIQUE (organization_cd)
 );
 
 -- 部門ビジネステーブル（tmp_integratedid_department → biz_department）
 CREATE TABLE public.biz_department (
     department_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,
     company_cd VARCHAR(3) NOT NULL,
-    department_cd VARCHAR(5) NOT NULL,
-    department_nm VARCHAR(60) NOT NULL,
+    company_nm VARCHAR(100) NOT NULL,
+    control_cd VARCHAR(5) NOT NULL,
+    control_nm VARCHAR(100) NOT NULL,
+    charge_cd VARCHAR(5) NOT NULL,
+    charge_nm VARCHAR(100) NOT NULL,
     parent_department_cd VARCHAR(5) NOT NULL,
-    organization_cd VARCHAR(19) NOT NULL,
-    print_order VARCHAR(4) NOT NULL,
-    -- 設計書要件の監査カラム追加
+    parent_department_nm VARCHAR(100) NOT NULL,
+    department_cd VARCHAR(5) NOT NULL,
+    department_nm VARCHAR(100) NOT NULL,
+    department_nm_en VARCHAR(100),
+    zip_cd VARCHAR(7),
+    address VARCHAR(200),
+    telephone_no VARCHAR(20),
+    fax_no VARCHAR(20),
+    extension_no VARCHAR(20),
+    class_sales VARCHAR(2),
+    class_data_input VARCHAR(2),
+    print_order INTEGER NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE, -- タイムスタンプ型に変換
     create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
-    CONSTRAINT biz_department_company_cd_department_cd_key
-        UNIQUE (company_cd, department_cd)
+    CONSTRAINT biz_department_unique_key UNIQUE (company_cd, department_cd),
+    -- 自己参照制約を追加
+    CONSTRAINT fk_biz_department_parent
+        FOREIGN KEY (parent_department_cd)
+        REFERENCES public.biz_department(department_cd)
 );
 
 -- 部門ステージングテーブル（tmp_department → stg_department）
 CREATE TABLE public.stg_department (
     department_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,
     company_cd VARCHAR(3) NOT NULL,
+    company_nm VARCHAR(100) NOT NULL,
+    control_cd VARCHAR(5) NOT NULL,
+    control_nm VARCHAR(100) NOT NULL,
+    charge_cd VARCHAR(5) NOT NULL,
+    charge_nm VARCHAR(100) NOT NULL,
+    parent_department_cd VARCHAR(5) NOT NULL,
+    parent_department_nm VARCHAR(100) NOT NULL,
     department_cd VARCHAR(5) NOT NULL,
+    department_nm VARCHAR(100) NOT NULL,
+    department_nm_en VARCHAR(100),
+    zip_cd VARCHAR(7),
+    address VARCHAR(200),
+    telephone_no VARCHAR(20),
+    fax_no VARCHAR(20),
+    extension_no VARCHAR(20),
+    class_sales VARCHAR(2),
+    class_data_input VARCHAR(2),
+    update_date VARCHAR(19) NOT NULL, -- CSV形式のまま保持
     create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
-    CONSTRAINT stg_department_company_cd_department_cd_key
-        UNIQUE (company_cd, department_cd)
-);
-
--- 従業員ビジネステーブル（tmp_integratedid_employee → biz_employee）
-CREATE TABLE public.biz_employee (
-    employee_id SERIAL PRIMARY KEY,
-    company_cd VARCHAR(3) NOT NULL,
-    employee_cd VARCHAR(7) NOT NULL,
-    family_nm VARCHAR(20) NOT NULL,
-    first_nm VARCHAR(20) NOT NULL,
-    family_nm_kana VARCHAR(40) NOT NULL,
-    first_nm_kana VARCHAR(40) NOT NULL,
-    department_cd VARCHAR(5) NOT NULL,
-    post_cd VARCHAR(4) NOT NULL,
-    assign_grade VARCHAR(2) NOT NULL,
-    -- 設計書要件: 生年月日をDATE型に変更
-    birthday DATE NOT NULL,
-    pin VARCHAR(8) NOT NULL,
-    -- 設計書要件の監査カラム追加
-    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
-    CONSTRAINT biz_employee_company_cd_employee_cd_key
-        UNIQUE (company_cd, employee_cd)
+    CONSTRAINT stg_department_unique_key UNIQUE (company_cd, department_cd)
 );
 
 --  従業員ステージングテーブル（tmp_employee → stg_employee）
 CREATE TABLE public.stg_employee (
     employee_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,
     company_cd VARCHAR(3) NOT NULL,
+    department_cd VARCHAR(5) NOT NULL,
+    department_nm VARCHAR(100) NOT NULL,
     employee_cd VARCHAR(7) NOT NULL,
+    employee_nm_kanji VARCHAR(50) NOT NULL,
+    employee_nm_kana VARCHAR(50) NOT NULL,
+    executive_post_cd VARCHAR(3) NOT NULL,
+    post_lineage_cd VARCHAR(2) NOT NULL,
+    class VARCHAR(4) NOT NULL,
+    sex_cd VARCHAR(1) NOT NULL,
+    birthday VARCHAR(8) NOT NULL,  -- CSV形式のままVARCHARで保持
+    mail_address VARCHAR(100),
     assign_grade VARCHAR(2) NOT NULL,
+    class_tel_addressbook VARCHAR(1),
+    class_temporary_transfer VARCHAR(1),
+    mail_address_automa_de_flg VARCHAR(1),
+    class_data_input VARCHAR(2),
+    update_date VARCHAR(14) NOT NULL,  -- CSV形式のまま
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    CONSTRAINT stg_employee_unique_key UNIQUE (company_cd, employee_cd, assign_grade)
+);
+
+-- 従業員ビジネステーブル（tmp_integratedid_employee → biz_employee）
+CREATE TABLE public.biz_employee (
+    employee_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,
+    company_cd VARCHAR(3) NOT NULL,
+    department_cd VARCHAR(5) NOT NULL,
+    department_nm VARCHAR(100) NOT NULL,
+    employee_cd VARCHAR(7) NOT NULL,
+    employee_nm_kanji VARCHAR(50) NOT NULL,
+    employee_nm_kana VARCHAR(50) NOT NULL,
+    executive_post_cd VARCHAR(3) NOT NULL,
+    post_lineage_cd VARCHAR(2) NOT NULL,
+    class VARCHAR(4) NOT NULL,
+    sex_cd VARCHAR(1) NOT NULL,
+    birthday DATE NOT NULL,  -- DATE型に変換
+    mail_address VARCHAR(100),
+    assign_grade VARCHAR(2) NOT NULL,
+    class_tel_addressbook VARCHAR(1),
+    class_temporary_transfer VARCHAR(1),
+    mail_address_automa_de_flg VARCHAR(1),
+    class_data_input VARCHAR(2),
+    update_date TIMESTAMP WITHOUT TIME ZONE,  -- タイムスタンプ型に変換
+    pin VARCHAR(8) NOT NULL,  -- 要件に基づき追加
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    CONSTRAINT biz_employee_unique_key UNIQUE (company_cd, employee_cd)
+);
+
+-- ADステージングテーブル（tmp_ad → stg_ad）
+CREATE TABLE public.stg_ad (
+    ad_id SERIAL PRIMARY KEY,
+    user_logon_name VARCHAR(20) NOT NULL,  -- login_nm → user_logon_name
+    display_name VARCHAR(100),             -- disp_nm → display_name
+    last_name VARCHAR(50),                 -- last_nm → last_name
+    first_name VARCHAR(50),                -- first_nm → first_name
+    mail VARCHAR(256),
+    position_name VARCHAR(50),             -- position → position_name (予約語回避)
     create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
-    CONSTRAINT stg_employee_company_cd_employee_cd_assign_grade_key
-        UNIQUE (company_cd, employee_cd, assign_grade)
+    deleted BOOLEAN DEFAULT false NOT NULL,
+    CONSTRAINT stg_ad_user_logon_name_key UNIQUE (user_logon_name)
 );
+
+-- ビジネスADテーブル（biz_ad）
+CREATE TABLE public.biz_ad (
+    ad_id SERIAL PRIMARY KEY,
+    user_logon_name VARCHAR(20) NOT NULL,
+    display_name VARCHAR(100),
+    last_name VARCHAR(50),
+    first_name VARCHAR(50),
+    mail VARCHAR(256),
+    position_name VARCHAR(50),             -- position → position_name (予約語回避)
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT false NOT NULL,
+    CONSTRAINT biz_ad_user_logon_name_key UNIQUE (user_logon_name)
+);
+
+-- コメント追加
+COMMENT ON COLUMN public.stg_ad.user_logon_name IS 'ADログオン名（社員コード）';
+COMMENT ON COLUMN public.stg_ad.display_name IS '表示名（姓＋スペース＋名）';
+COMMENT ON COLUMN public.stg_ad.last_name IS '姓（ローマ字）';
+COMMENT ON COLUMN public.stg_ad.first_name IS '名（ローマ字）';
+COMMENT ON COLUMN public.stg_ad.mail IS 'メールアドレス';
+COMMENT ON COLUMN public.stg_ad.position_name IS '役職情報';
+COMMENT ON COLUMN public.stg_ad.deleted IS '論理削除フラグ';
+
+COMMENT ON COLUMN public.biz_ad.user_logon_name IS 'ADログオン名（社員コード）';
+COMMENT ON COLUMN public.biz_ad.display_name IS '表示名（姓＋スペース＋名）';
+COMMENT ON COLUMN public.biz_ad.last_name IS '姓（ローマ字）';
+COMMENT ON COLUMN public.biz_ad.first_name IS '名（ローマ字）';
+COMMENT ON COLUMN public.biz_ad.mail IS 'メールアドレス';
+COMMENT ON COLUMN public.biz_ad.position_name IS '役職情報';
+COMMENT ON COLUMN public.biz_ad.deleted IS '論理削除フラグ';
+
 
 --  役職ステージングテーブル（tmp_executive → stg_executive）
 CREATE TABLE public.stg_executive (
@@ -232,19 +346,6 @@ CREATE TABLE public.stg_executive (
         UNIQUE (executive_post_cd)
 );
 
--- ADステージングテーブル（tmp_ad → stg_ad）
-CREATE TABLE public.stg_ad (
-    employee_id SERIAL PRIMARY KEY,
-    company_cd VARCHAR(3) NOT NULL,
-    employee_cd VARCHAR(7) NOT NULL,
-    assign_grade VARCHAR(2) NOT NULL,
-    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
-    CONSTRAINT stg_ad_company_cd_employee_cd_assign_grade_key
-        UNIQUE (company_cd, employee_cd, assign_grade)
-);
-
 -- 店部課マスタ
 CREATE TABLE public.mst_section (
     section_id SERIAL PRIMARY KEY,
@@ -252,8 +353,8 @@ CREATE TABLE public.mst_section (
     section_cd VARCHAR(5) NOT NULL,
     section_nm VARCHAR(60) NOT NULL,
     parent_section_cd VARCHAR(5) NOT NULL,
-    organization_cd VARCHAR(19) NOT NULL,
-    print_order VARCHAR(4) NOT NULL,
+    organization_cd VARCHAR(17) NOT NULL,
+    print_order INTEGER NOT NULL,
     create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
@@ -287,7 +388,21 @@ CREATE TABLE public.trn_phone (
     update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
     deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    update_status VARCHAR(1) DEFAULT '0' NOT NULL, -- 追加カラム
     CONSTRAINT trn_phone_phone_nm_key UNIQUE (phone_nm)
+);
+
+
+CREATE TABLE public.app_user (
+    app_user_id SERIAL PRIMARY KEY,
+    biz_employee_id VARCHAR(7) NOT NULL, -- 社員コード
+    enabled_shared_use CHAR(1) DEFAULT '0' NOT NULL, -- '0' or '1'
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    -- 監査カラム（他のテーブルと統一）
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    CONSTRAINT app_user_biz_employee_id_key UNIQUE (biz_employee_id)
 );
 
 -- ユーザートランザクションテーブル（重要修正）
@@ -296,7 +411,7 @@ CREATE TABLE public.trn_user (
     company_cd VARCHAR(3) NOT NULL,
     employee_cd VARCHAR(7) NOT NULL,
     user_nm VARCHAR(40) NOT NULL,
-    user_nm_kana VARCHAR(80) NOT NULL,
+    user_nm_kana VARCHAR(50) NOT NULL,
     mail_address VARCHAR(256) NOT NULL,
     password_hash VARCHAR(128) NOT NULL,
     -- 設計書要件: パスワードソルト追加
@@ -377,6 +492,20 @@ CREATE TABLE public.trn_diff_officelink (
         UNIQUE (user_id, diff_type, detected_at)
 );
 
+CREATE TABLE public.r_user_section (
+    r_user_section_id SERIAL PRIMARY KEY,
+    app_user_id INTEGER NOT NULL REFERENCES public.app_user(app_user_id),
+    company_id VARCHAR(3) NOT NULL, -- 会社コード
+    section_id VARCHAR(5) NOT NULL, -- 店部課コード（5桁固定）
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    -- 監査カラム
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    CONSTRAINT r_user_section_unique_key UNIQUE (app_user_id, company_id, section_id)
+);
+
+
 -- 店舗-店部課関連テーブル
 CREATE TABLE public.rel_branch_section (
     branch_section_id SERIAL PRIMARY KEY,
@@ -393,7 +522,7 @@ CREATE TABLE public.rel_cucm_phone_line (
     phone_line_id SERIAL PRIMARY KEY,
     phone_id INTEGER NOT NULL REFERENCES public.trn_phone(phone_id),
     line_id INTEGER NOT NULL REFERENCES public.trn_line(line_id),
-    line_no INTEGER NOT NULL,
+    line_no VARCHAR(4) NOT NULL,
     create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
@@ -471,6 +600,21 @@ CREATE TABLE public.mst_section_history (
     original_data JSONB NOT NULL
 );
 
+CREATE TABLE public.stg_shift (
+    shift_id SERIAL PRIMARY KEY,
+    old_branch_cd VARCHAR(5) NOT NULL,
+    old_company_cd VARCHAR(3) NOT NULL,
+    old_department_cd VARCHAR(5) NOT NULL,
+    new_branch_cd VARCHAR(5) NOT NULL,
+    new_company_cd VARCHAR(3) NOT NULL,
+    new_department_cd VARCHAR(5) NOT NULL,
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    CONSTRAINT stg_shift_unique_old_values
+        UNIQUE (old_branch_cd, old_company_cd, old_department_cd)
+);
+
 -- 機構改革情報テーブル（新規）
 CREATE TABLE public.biz_shift (
     shift_id SERIAL PRIMARY KEY,
@@ -487,6 +631,628 @@ CREATE TABLE public.biz_shift (
         UNIQUE (old_branch_cd, old_company_cd, old_department_cd)
 );
 
+-- 店舗マスタ履歴テーブル追加例
+CREATE TABLE public.mst_branch_history (
+    history_id BIGSERIAL PRIMARY KEY,
+    branch_id INTEGER NOT NULL REFERENCES mst_branch(branch_id),
+    operation VARCHAR(10) NOT NULL CHECK (operation IN ('INSERT','UPDATE','DELETE')),
+    operation_time TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    original_data JSONB NOT NULL
+);
+
+CREATE INDEX idx_biz_employee_department ON biz_employee(department_cd);
+CREATE INDEX idx_trn_user_company ON trn_user(company_cd);
+CREATE INDEX idx_trn_phone_device ON trn_phone(device_type_id);
+```
+
+# ※新しいスキーマの整理完全版(外部キー制約解除)
+
+`外部キーなしirdb-schema-new.sql`
+
+```sql
+-- 店舗マスタ
+CREATE TABLE public.mst_branch (
+    branch_id SERIAL PRIMARY KEY,
+    branch_cd character varying(5) NOT NULL,
+    branch_nm character varying(40) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCMコーリングサーチスペースマスタ
+CREATE TABLE public.mst_cucm_calling_search_space (
+    calling_search_space_id SERIAL PRIMARY KEY,
+    calling_search_space_nm character varying(100) NOT NULL,
+    cd1 character varying(3) NOT NULL,
+    cd2 character varying(5) NOT NULL,
+    cd3 character varying(5) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCMデバイスプールマスタ
+CREATE TABLE public.mst_cucm_device_pool (
+    device_pool_id SERIAL PRIMARY KEY,
+    device_pool_nm character varying(100) NOT NULL,
+    cisco_unified_callmanager_group character varying(36) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCMデバイスタイプマスタ
+CREATE TABLE public.mst_cucm_device_type (
+    device_type_id SERIAL PRIMARY KEY,
+    device_type_nm character varying(100) NOT NULL,
+    device_type_no integer,
+    device_protocol character varying(4),
+    rel_device_type_no integer,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCMロケーションマスタ
+CREATE TABLE public.mst_cucm_location (
+    location_id SERIAL PRIMARY KEY,
+    location_nm character varying(8) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCM電話テンプレートマスタ
+CREATE TABLE public.mst_cucm_phone_template (
+    phone_template_id SERIAL PRIMARY KEY,
+    phone_template_nm character varying(100) NOT NULL,
+    device_type_id integer NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCMピックアップグループマスタ
+CREATE TABLE public.mst_cucm_pickup_group (
+    pickup_group_id SERIAL PRIMARY KEY,
+    pickup_group_nm character varying(19) NOT NULL,
+    pickup_group_no integer NOT NULL,
+    branch_cd character varying(3) NOT NULL,
+    section_id INTEGER NOT NULL, -- 型をINTEGERに変更
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCMソフトキーテンプレートマスタ
+CREATE TABLE public.mst_cucm_softkey_template (
+    softkey_template_id SERIAL PRIMARY KEY,
+    softkey_template_nm character varying(100) NOT NULL,
+    device_type_no integer NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCMボイスメールプロファイルマスタ
+CREATE TABLE public.mst_cucm_voice_mail_profile (
+    voice_mail_profile_id SERIAL PRIMARY KEY,
+    voice_mail_profile_nm character varying(100) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- 共有名称マスタ
+CREATE TABLE public.mst_shared_nm (
+    shared_id SERIAL PRIMARY KEY,
+    shared_nm character varying(25) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- 組織ビジネステーブル（tmp_integratedid_organization → biz_organization）
+CREATE TABLE public.biz_organization (
+    organization_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,
+    organization_nm VARCHAR(100) NOT NULL,
+    parent_organization_cd VARCHAR(17) NOT NULL,  -- 上位組織コード（外部キー制約なし）
+    organization_no VARCHAR(7) NOT NULL,          -- 組織番号（追加）
+    organization_abbreviated_nm VARCHAR(50) NOT NULL,  -- 組織略称（追加）
+    print_order INTEGER NOT NULL,                -- 数値型に正規化
+    class_sales VARCHAR(2) NOT NULL,             -- 営業区分（追加）
+    class_data_input VARCHAR(2) NOT NULL,        -- データ入力区分（追加）
+    update_date TIMESTAMP WITHOUT TIME ZONE,     -- タイムスタンプ型に変換
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    CONSTRAINT biz_organization_unique_key UNIQUE (organization_cd)
+);
+
+
+-- 組織ステージングテーブル（tmp_organization → stg_organization）
+CREATE TABLE public.stg_organization (
+    organization_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,  -- CSVの定義と一致させる（19→17に統一）
+    organization_nm VARCHAR(100) NOT NULL,  -- 組織名を拡張
+    parent_organization_cd VARCHAR(17) NOT NULL,  -- 上位組織（追加カラム）
+    organization_no VARCHAR(7) NOT NULL,   -- CSVにある組織番号（追加）
+    organization_abbreviated_nm VARCHAR(50) NOT NULL,  -- 組織略称（追加）
+    print_order INTEGER NOT NULL,
+    class_sales VARCHAR(2) NOT NULL,       -- 営業区分（追加）
+    class_data_input VARCHAR(2) NOT NULL,  -- データ入力区分（追加）
+    update_date VARCHAR(14) NOT NULL,      -- CSV形式で保持（例: 20250617153000）
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    CONSTRAINT stg_organization_unique_key UNIQUE (organization_cd)
+);
+
+-- 部門ビジネステーブル（tmp_integratedid_department → biz_department）
+CREATE TABLE public.biz_department (
+    department_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,             -- 組織コード
+    company_cd VARCHAR(3) NOT NULL,                   -- 会社コード
+    company_nm VARCHAR(100) NOT NULL,                 -- 会社名（追加）
+    control_cd VARCHAR(5) NOT NULL,                   -- 統括コード（追加）
+    control_nm VARCHAR(100) NOT NULL,                 -- 統括名（追加）
+    charge_cd VARCHAR(5) NOT NULL,                    -- 担当コード（追加）
+    charge_nm VARCHAR(100) NOT NULL,                  -- 担当名（追加）
+    parent_department_cd VARCHAR(5) NOT NULL,         -- 親部門コード
+    parent_department_nm VARCHAR(100) NOT NULL,       -- 親部門名（追加）
+    department_cd VARCHAR(5) NOT NULL,                -- 部門コード
+    department_nm VARCHAR(100) NOT NULL,              -- 部門名（長さ変更 + 保管）
+    department_nm_en VARCHAR(100),                    -- 英語名（追加）
+    zip_cd VARCHAR(7),                                -- 郵便番号（追加）
+    address VARCHAR(200),                             -- 住所（追加）
+    telephone_no VARCHAR(20),                         -- 電話番号（追加）
+    fax_no VARCHAR(20),                               -- FAX番号（追加）
+    extension_no VARCHAR(20),                         -- 内線番号（追加）
+    class_sales VARCHAR(2),                           -- 営業区分（追加）
+    class_data_input VARCHAR(2),                      -- データ入力区分（追加）
+    print_order INTEGER NOT NULL,                  -- 印刷順（元からあり）
+    update_date TIMESTAMP WITHOUT TIME ZONE,          -- 日付（型変換済み）
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,           -- 論理削除
+    CONSTRAINT biz_department_unique_key UNIQUE (company_cd, department_cd)
+);
+
+-- 部門ステージングテーブル（tmp_department → stg_department）
+CREATE TABLE public.stg_department (
+    department_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,                -- 組織コード
+    company_cd VARCHAR(3) NOT NULL,                      -- 会社コード
+    company_nm VARCHAR(100) NOT NULL,                    -- 会社名
+    control_cd VARCHAR(5) NOT NULL,                      -- 統括コード
+    control_nm VARCHAR(100) NOT NULL,                    -- 統括名
+    charge_cd VARCHAR(5) NOT NULL,                       -- 担当コード
+    charge_nm VARCHAR(100) NOT NULL,                     -- 担当名
+    parent_department_cd VARCHAR(5) NOT NULL,            -- 親部門コード
+    parent_department_nm VARCHAR(100) NOT NULL,          -- 親部門名
+    department_cd VARCHAR(5) NOT NULL,                   -- 部門コード
+    department_nm VARCHAR(100) NOT NULL,                 -- 部門名
+    department_nm_en VARCHAR(100),                       -- 部門名（英語）
+    zip_cd VARCHAR(7),                                   -- 郵便番号
+    address VARCHAR(200),                                -- 住所
+    telephone_no VARCHAR(20),                            -- 電話番号
+    fax_no VARCHAR(20),                                  -- FAX番号
+    extension_no VARCHAR(20),                            -- 内線番号
+    class_sales VARCHAR(2),                              -- 営業区分
+    class_data_input VARCHAR(2),                         -- データ入力区分
+    update_date VARCHAR(19) NOT NULL,                    -- CSV形式の更新日（そのまま保持）
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    CONSTRAINT stg_department_unique_key UNIQUE (company_cd, department_cd)
+);
+
+
+-- 従業員ビジネステーブル（tmp_integratedid_employee → biz_employee）
+CREATE TABLE public.biz_employee (
+    employee_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,
+    company_cd VARCHAR(3) NOT NULL,
+    department_cd VARCHAR(5) NOT NULL,
+    department_nm VARCHAR(100) NOT NULL,
+    employee_cd VARCHAR(7) NOT NULL,
+    employee_nm_kanji VARCHAR(50) NOT NULL,
+    employee_nm_kana VARCHAR(50) NOT NULL,
+    executive_post_cd VARCHAR(3) NOT NULL,
+    post_lineage_cd VARCHAR(2) NOT NULL,
+    post_cd VARCHAR(4) NOT NULL,
+    class VARCHAR(4) NOT NULL,
+    sex_cd VARCHAR(1) NOT NULL,
+    birthday DATE NOT NULL,
+    mail_address VARCHAR(100),
+    assign_grade VARCHAR(2) NOT NULL,
+    class_tel_addressbook VARCHAR(1),
+    class_temporary_transfer VARCHAR(1),
+    mail_address_automa_de_flg VARCHAR(1),
+    class_data_input VARCHAR(2),
+    pin VARCHAR(8) NOT NULL,
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL, -- ★不足していた項目
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    CONSTRAINT biz_employee_unique_key UNIQUE (company_cd, employee_cd)
+);
+
+--  従業員ステージングテーブル（tmp_employee → stg_employee）
+CREATE TABLE public.stg_employee (
+    employee_id SERIAL PRIMARY KEY,
+    organization_cd VARCHAR(17) NOT NULL,
+    company_cd VARCHAR(3) NOT NULL,
+    department_cd VARCHAR(5) NOT NULL,
+    department_nm VARCHAR(100) NOT NULL,
+    employee_cd VARCHAR(7) NOT NULL,
+    employee_nm_kanji VARCHAR(50) NOT NULL,
+    employee_nm_kana VARCHAR(50) NOT NULL,
+    executive_post_cd VARCHAR(3) NOT NULL,
+    post_lineage_cd VARCHAR(2) NOT NULL,
+    class VARCHAR(4) NOT NULL,
+    sex_cd VARCHAR(1) NOT NULL,
+    birthday VARCHAR(8) NOT NULL, -- CSV取込用に文字列形式
+    mail_address VARCHAR(100),
+    assign_grade VARCHAR(2) NOT NULL,
+    class_tel_addressbook VARCHAR(1),
+    class_temporary_transfer VARCHAR(1),
+    mail_address_automa_de_flg VARCHAR(1),
+    class_data_input VARCHAR(2),
+    update_date VARCHAR(14) NOT NULL, -- 例: '20250617153000'
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_timestamp TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    CONSTRAINT stg_employee_unique_key UNIQUE (company_cd, employee_cd, assign_grade)
+);
+
+-- ADステージングテーブル（tmp_ad → stg_ad）
+CREATE TABLE public.stg_ad (
+    ad_id SERIAL PRIMARY KEY,
+    user_logon_name VARCHAR(20) NOT NULL,  -- login_nm → user_logon_name
+    display_name VARCHAR(100),             -- disp_nm → display_name
+    last_name VARCHAR(50),                 -- last_nm → last_name
+    first_name VARCHAR(50),                -- first_nm → first_name
+    mail VARCHAR(256),
+    position_name VARCHAR(50),             -- position → position_name (予約語回避)
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT false NOT NULL,
+    CONSTRAINT stg_ad_user_logon_name_key UNIQUE (user_logon_name)
+);
+
+-- ビジネスADテーブル（biz_ad）
+CREATE TABLE public.biz_ad (
+    ad_id SERIAL PRIMARY KEY,
+    user_logon_name VARCHAR(20) NOT NULL,
+    display_name VARCHAR(100),
+    last_name VARCHAR(50),
+    first_name VARCHAR(50),
+    mail VARCHAR(256),
+    position_name VARCHAR(50),             -- position → position_name (予約語回避)
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT false NOT NULL,
+    CONSTRAINT biz_ad_user_logon_name_key UNIQUE (user_logon_name)
+);
+
+-- コメント追加
+COMMENT ON COLUMN public.stg_ad.user_logon_name IS 'ADログオン名（社員コード）';
+COMMENT ON COLUMN public.stg_ad.display_name IS '表示名（姓＋スペース＋名）';
+COMMENT ON COLUMN public.stg_ad.last_name IS '姓（ローマ字）';
+COMMENT ON COLUMN public.stg_ad.first_name IS '名（ローマ字）';
+COMMENT ON COLUMN public.stg_ad.mail IS 'メールアドレス';
+COMMENT ON COLUMN public.stg_ad.position_name IS '役職情報';
+COMMENT ON COLUMN public.stg_ad.deleted IS '論理削除フラグ';
+
+COMMENT ON COLUMN public.biz_ad.user_logon_name IS 'ADログオン名（社員コード）';
+COMMENT ON COLUMN public.biz_ad.display_name IS '表示名（姓＋スペース＋名）';
+COMMENT ON COLUMN public.biz_ad.last_name IS '姓（ローマ字）';
+COMMENT ON COLUMN public.biz_ad.first_name IS '名（ローマ字）';
+COMMENT ON COLUMN public.biz_ad.mail IS 'メールアドレス';
+COMMENT ON COLUMN public.biz_ad.position_name IS '役職情報';
+COMMENT ON COLUMN public.biz_ad.deleted IS '論理削除フラグ';
+
+--  役職ステージングテーブル（tmp_executive → stg_executive）
+CREATE TABLE public.stg_executive (
+    executive_post_id SERIAL PRIMARY KEY,
+    executive_post_cd character varying(3) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- 店部課マスタ
+CREATE TABLE public.mst_section (
+    section_id SERIAL PRIMARY KEY,
+    company_cd character varying(3) NOT NULL,
+    section_cd character varying(5) NOT NULL,
+    section_nm character varying(60) NOT NULL,
+    parent_section_cd character varying(5) NOT NULL,
+    organization_cd character varying(17) NOT NULL,
+    print_order character varying(4) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- 内線トランザクションテーブル（修正）
+CREATE TABLE public.trn_line (
+    line_id SERIAL PRIMARY KEY,
+    line_no character varying(4) NOT NULL,
+    cucm_calling_search_space_id integer,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- 電話機トランザクションテーブル（修正）
+CREATE TABLE public.trn_phone (
+    phone_id SERIAL PRIMARY KEY,
+    phone_nm character varying(100) NOT NULL,
+    device_pool_id integer NOT NULL,
+    device_type_id integer NOT NULL,
+    phone_template_id integer NOT NULL,
+    location_id integer NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+	update_status VARCHAR(1) DEFAULT '0' NOT NULL -- 追加カラム
+);
+
+CREATE TABLE public.app_user (
+    app_user_id SERIAL PRIMARY KEY,
+    biz_employee_id VARCHAR(7) NOT NULL, -- 社員コード（外部キー制約なし）
+    enabled_shared_use CHAR(1) DEFAULT '0' NOT NULL, -- 共有利用の有効フラグ: '0' or '1'
+    deleted BOOLEAN DEFAULT FALSE NOT NULL, -- '1' = 削除済
+    -- 監査カラム（他のテーブルと統一）
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    CONSTRAINT app_user_biz_employee_id_key UNIQUE (biz_employee_id)
+);
+
+-- ユーザートランザクションテーブル（重要修正）
+CREATE TABLE public.trn_user (
+    user_id SERIAL PRIMARY KEY,
+    company_cd character varying(3) NOT NULL,
+    employee_cd character varying(7) NOT NULL,
+    user_nm character varying(40) NOT NULL,
+    user_nm_kana character varying(50) NOT NULL,
+    mail_address character varying(256) NOT NULL,
+    password_hash character varying(128) NOT NULL,
+    password_salt character varying(32) NOT NULL,
+    pin character varying(8) NOT NULL,
+    birthday date NOT NULL,
+    voice_mail_profile_id integer,
+    pickup_group_id integer,
+    deleted boolean DEFAULT false NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL
+);
+
+-- 課金関連トランザクションテーブル
+CREATE TABLE public.trn_charge_association (
+    charge_association_id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    charge_item_cd character varying(10) NOT NULL,
+    association_start_date date NOT NULL,
+    association_end_date date NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCM連携関連トランザクションテーブル
+CREATE TABLE public.trn_cuc_association (
+    cuc_association_id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    device_id character varying(50) NOT NULL,
+    association_type character varying(20) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCM差分トランザクションテーブル
+CREATE TABLE public.trn_diff_cucm (
+    diff_id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    diff_type character varying(20) NOT NULL,
+    before_value text,
+    after_value text,
+    detected_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    resolved_at timestamp without time zone,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL
+);
+
+--  OfficeLink差分トランザクションテーブル
+CREATE TABLE public.trn_diff_officelink (
+    diff_id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    diff_type character varying(20) NOT NULL,
+    before_value text,
+    after_value text,
+    detected_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    resolved_at timestamp without time zone,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL
+);
+
+CREATE TABLE public.r_user_section (
+    r_user_section_id SERIAL PRIMARY KEY,
+    app_user_id INTEGER NOT NULL, -- app_user_id（外部キー制約なし）
+    company_id VARCHAR(3) NOT NULL, -- 会社コード
+    section_id VARCHAR(5) NOT NULL, -- 店部課コード（5桁固定）
+    deleted BOOLEAN DEFAULT FALSE NOT NULL,
+    -- 監査カラム
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    CONSTRAINT r_user_section_unique_key UNIQUE (app_user_id, company_id, section_id)
+);
+
+-- 店舗-店部課関連テーブル
+CREATE TABLE public.rel_branch_section (
+    branch_section_id SERIAL PRIMARY KEY,
+    branch_id integer NOT NULL,
+    section_id integer NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCM電話機-内線番号関連テーブル
+CREATE TABLE public.rel_cucm_phone_line (
+    phone_line_id SERIAL PRIMARY KEY,
+    phone_id integer NOT NULL,
+    line_id integer NOT NULL,
+    line_no VARCHAR(4) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- CUCMユーザー-電話機関連テーブル
+CREATE TABLE public.rel_cucm_user_phone (
+    user_phone_id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    phone_id integer NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- ユーザー-店部課関連テーブル
+CREATE TABLE public.rel_user_section (
+    user_section_id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    section_id integer NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- OfficeLink FMCトランザクションテーブル（修正）
+CREATE TABLE public.trn_officelink_fmc (
+    fmc_id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    device_id character varying(50) NOT NULL,
+    association_status character varying(20) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+-- パスワード変更追跡トランザクションテーブル（修正）
+CREATE TABLE public.trn_password_change_tracking (
+    tracking_id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    password_hash character varying(128) NOT NULL,
+    change_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- 監査ログテーブル（新規）
+CREATE TABLE public.audit_log (
+    log_id BIGSERIAL PRIMARY KEY,
+    table_name character varying(50) NOT NULL,
+    record_id character varying(50) NOT NULL,
+    operation character varying(10) NOT NULL,
+    old_value jsonb,
+    new_value jsonb,
+    executed_by character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+    executed_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT audit_log_operation_check CHECK (((operation)::text = ANY ((ARRAY['INSERT'::character varying, 'UPDATE'::character varying, 'DELETE'::character varying])::text[]))),
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- 店部課履歴テーブル（新規）
+CREATE TABLE public.mst_section_history (
+    history_id BIGSERIAL PRIMARY KEY,
+    section_id integer NOT NULL,
+    operation character varying(10) NOT NULL,
+    operation_time timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    original_data jsonb NOT NULL,
+    CONSTRAINT mst_section_history_operation_check CHECK (((operation)::text = ANY ((ARRAY['INSERT'::character varying, 'UPDATE'::character varying, 'DELETE'::character varying])::text[]))),
+	deleted boolean DEFAULT false NOT NULL
+);
+
+CREATE TABLE public.stg_shift (
+    shift_id SERIAL PRIMARY KEY,
+    old_branch_cd VARCHAR(5) NOT NULL,
+    old_company_cd VARCHAR(3) NOT NULL,
+    old_department_cd VARCHAR(5) NOT NULL,
+    new_branch_cd VARCHAR(5) NOT NULL,
+    new_company_cd VARCHAR(3) NOT NULL,
+    new_department_cd VARCHAR(5) NOT NULL,
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL,
+    deleted BOOLEAN DEFAULT false NOT NULL
+);
+
+-- 機構改革情報テーブル（新規）
+CREATE TABLE public.biz_shift (
+    shift_id SERIAL PRIMARY KEY,
+    old_branch_cd character varying(5) NOT NULL,
+    old_company_cd character varying(3) NOT NULL,
+    old_department_cd character varying(5) NOT NULL,
+    new_branch_cd character varying(5) NOT NULL,
+    new_company_cd character varying(3) NOT NULL,
+    new_department_cd character varying(5) NOT NULL,
+    create_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user character varying(50) DEFAULT 'BATCH'::character varying NOT NULL,
+	deleted boolean DEFAULT false NOT NULL
+);
+
+-- 店舗マスタ履歴テーブル（外部キーなし）
+CREATE TABLE public.mst_branch_history (
+    history_id BIGSERIAL PRIMARY KEY,
+    branch_id INTEGER NOT NULL,
+    operation VARCHAR(10) NOT NULL CHECK (operation IN ('INSERT','UPDATE','DELETE')),
+    operation_time TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    original_data JSONB NOT NULL
+);
 ```
 
 ## 古いデータベーススキーマ
