@@ -58,6 +58,53 @@ export default defineConfig({
     ],
 
     sidebar: {
+      "/about/": [
+        {
+          text: "私について",
+          collapsed: true,
+          items: [
+            {
+              text: "11. 📝 管理ログ（Admin Logs）API開発",
+              link: "/about/api11",
+            },
+          ],
+        },
+        {
+          text: "GitHub運用計画",
+          collapsed: true,
+          items: [
+            { text: "運用フロー", link: "/about/GitHubFlow" },
+            { text: "提案-1", link: "/about/GitHubFlow01" },
+            { text: "提案-2", link: "/about/GitHubFlow02" },
+            { text: "Jira提案-1", link: "/about/GitHubJiraFlow01" },
+            { text: "Jira提案-2", link: "/about/GitHubJiraFlow02" },
+            { text: "Jira提案-3", link: "/about/GitHubJiraFlow03" },
+            { text: "Jira提案-4", link: "/about/GitHubJiraFlow04" },
+          ],
+        },
+        {
+          text: "GitHub運用実践",
+          collapsed: true,
+          items: [
+            { text: "GitHub運用実践手順書", link: "/about/GitHubFlowtejyun" },
+            { text: "①Jira アカウント登録", link: "/about/JiraCloud" },
+            { text: "③CI・PR 作業準備", link: "/about/CI_PR" },
+            { text: "④空のリポジトリを作成", link: "/about/CreateRepository" },
+            {
+              text: "⑤初プッシュ（main ではない！）",
+              link: "/about/init-project",
+            },
+            {
+              text: "⑥各ブランチの作成）",
+              link: "/about/create-feature",
+            },
+            {
+              text: "⑦ブランチ保護設定）",
+              link: "/about/branch-hogo",
+            },
+          ],
+        },
+      ],
       "/code/": [
         {
           text: "フロントエンド設定",
@@ -95,6 +142,37 @@ export default defineConfig({
             { text: "データベーススキーマ取得", link: "/code/db_schema" },
             { text: "pg_adminセキュリティー", link: "/code/pg_admin" },
           ],
+        },
+      ],
+      "/coment/": [
+        {
+          text: "Spring Boot開発説明",
+          collapsed: false,
+          items: [
+            { text: "001事前準備", link: "/coment/keikaku001" },
+            { text: "002プロジェクト構成案", link: "/coment/keikaku002" },
+            { text: "003次のステップ", link: "/coment/keikaku003" },
+            { text: "004ゴール第1段階", link: "/coment/keikaku004" },
+            { text: "005ゴール第2段階", link: "/coment/keikaku005" },
+            { text: "006ゴール第3段階", link: "/coment/keikaku006" },
+            { text: "006-1整合性確認", link: "/coment/keikaku006_1" },
+            { text: "006-2依存関係全体像", link: "/coment/keikaku006_2" },
+            { text: "007ゴール第4段階", link: "/coment/keikaku007" },
+            { text: "008挙動テスト", link: "/coment/keikaku008" },
+          ],
+        },
+        {
+          text: "バッチ開発",
+          collapsed: false,
+          items: [
+            { text: "009バッチ機能実装01", link: "/coment/keikaku009" },
+            { text: "グローバル状態管理", link: "/coment/groball_c" },
+          ],
+        },
+        {
+          text: "プロジェクト設定",
+          collapsed: false,
+          items: [{ text: "vercel.json", link: "/coment/vercel_json" }],
         },
       ],
       "/guide/": [
@@ -248,6 +326,64 @@ export default defineConfig({
           ],
         },
       ],
+      "/posts/": [
+        {
+          text: "記事",
+          collapsed: true,
+          items: [
+            { text: "bean登録問題解決", link: "/posts/error_01" },
+            {
+              text: "プロパティの連携",
+              link: "/posts/properties_settings",
+            },
+          ],
+        },
+        {
+          text: "メモ帳",
+          collapsed: true,
+          items: [
+            { text: "EntityとDTOの違い", link: "/posts/memo01" },
+            {
+              text: "UserMapper インターフェースについて",
+              link: "/posts/memo02",
+            },
+            {
+              text: "UserRepository インターフェースについて",
+              link: "/posts/memo03",
+            },
+            {
+              text: "UserRepositoryとUserMapper両方必要❌",
+              link: "/posts/memo04",
+            },
+            {
+              text: "重大問題見直す✅ ",
+              link: "/posts/memo05",
+            },
+            {
+              text: "実装の優先順位✅ ",
+              link: "/posts/memo06",
+            },
+          ],
+        },
+        {
+          text: "spring batchの一部流れ",
+          collapsed: true,
+          items: [
+            {
+              text: "HumanResourceJobConfig",
+              link: "/posts/HumanResourceJobConfig",
+            },
+            {
+              text: "ActiveDirectory情報の読み込み例",
+              link: "/posts/ActiveDirectory",
+            },
+            {
+              text: "job実行成功DEBUG情報",
+              link: "/posts/job_debug",
+            },
+          ],
+        },
+      ],
       "/tutorial/": [
         {
           text: "チュートリアル",
@@ -309,6 +445,23 @@ export default defineConfig({
             { text: "挙動確認", link: "/tutorial/batch_kakunin" },
             { text: "job実行問題について", link: "/tutorial/batch_kakunin02" },
             { text: "job実行問題解決", link: "/tutorial/batch_kakunin03" },
+            {
+              text: "job実行問題解決最新版",
+              link: "/tutorial/batch_kakunin04",
+            },
+          ],
+        },
+        {
+          text: "next.jsでバッチ実行",
+          collapsed: true,
+          items: [
+            {
+              text: "草案0.1",
+              link: "/tutorial/batch_nextjs01",
+            },
+            { text: "認証草案0.1", link: "/tutorial/Security_jwt01" },
+            { text: "認証草案0.2", link: "/tutorial/Security_jwt02" },
+            { text: "認証草案0.3", link: "/tutorial/Security_jwt03" },
             {
               text: "job実行問題解決最新版",
               link: "/tutorial/batch_kakunin04",
@@ -497,109 +650,6 @@ export default defineConfig({
               link: "/tutorial/MockIntegration_m",
             },
           ],
-        },
-      ],
-      "/posts/": [
-        {
-          text: "記事",
-          collapsed: true,
-          items: [
-            { text: "bean登録問題解決", link: "/posts/error_01" },
-            {
-              text: "プロパティの連携",
-              link: "/posts/properties_settings",
-            },
-          ],
-        },
-        {
-          text: "メモ帳",
-          collapsed: true,
-          items: [
-            { text: "EntityとDTOの違い", link: "/posts/memo01" },
-            {
-              text: "UserMapper インターフェースについて",
-              link: "/posts/memo02",
-            },
-            {
-              text: "UserRepository インターフェースについて",
-              link: "/posts/memo03",
-            },
-            {
-              text: "UserRepositoryとUserMapper両方必要❌",
-              link: "/posts/memo04",
-            },
-            {
-              text: "重大問題見直す✅ ",
-              link: "/posts/memo05",
-            },
-            {
-              text: "実装の優先順位✅ ",
-              link: "/posts/memo06",
-            },
-          ],
-        },
-      ],
-      "/about/": [
-        {
-          text: "私について",
-          collapsed: true,
-          items: [
-            { text: "プロフィール", link: "/about/me" },
-            { text: "ブログの歴史", link: "/about/history" },
-            { text: "Cloudflare本番D1作成", link: "/about/cd1" },
-            { text: "中レベルAPI設計", link: "/about/tes1" },
-            { text: "高レベルAPI設計", link: "/about/tes2" },
-            { text: "中高レベルAPI設計の採点", link: "/about/tes3" },
-            { text: "chatGPT開発流れ説明", link: "/about/tes4" },
-            { text: "DeepSeek V3 テーブル説明", link: "/about/tes6" },
-            { text: "DeepSeek R1 テーブル説明", link: "/about/tes5" },
-            { text: "ローカル開発とクラウド同期", link: "/about/douki" },
-            { text: "1. 🔐 認証系API開発", link: "/about/api1" },
-            { text: "2. 👤 ユーザー管理API開発", link: "/about/api2" },
-            { text: "3. 🛒 商品（Products）API開発", link: "/about/api3" },
-            { text: "4. 🖼️ 商品画像API開発", link: "/about/api4" },
-            { text: "5. 🏷️ タグAPI開発", link: "/about/api5" },
-            { text: "6. 📂 カテゴリAPI開発", link: "/about/api6" },
-            { text: "7. 🛍️ カートAPI開発", link: "/about/api7" },
-            { text: "8. 📦 注文API開発", link: "/about/api8" },
-            { text: "9. ✍️ レビューAPI開発", link: "/about/api9" },
-            { text: "10. 💖 お気に入りAPI開発", link: "/about/api10" },
-            {
-              text: "11. 📝 管理ログ（Admin Logs）API開発",
-              link: "/about/api11",
-            },
-          ],
-        },
-      ],
-      "/coment/": [
-        {
-          text: "Spring Boot開発説明",
-          collapsed: false,
-          items: [
-            { text: "001事前準備", link: "/coment/keikaku001" },
-            { text: "002プロジェクト構成案", link: "/coment/keikaku002" },
-            { text: "003次のステップ", link: "/coment/keikaku003" },
-            { text: "004ゴール第1段階", link: "/coment/keikaku004" },
-            { text: "005ゴール第2段階", link: "/coment/keikaku005" },
-            { text: "006ゴール第3段階", link: "/coment/keikaku006" },
-            { text: "006-1整合性確認", link: "/coment/keikaku006_1" },
-            { text: "006-2依存関係全体像", link: "/coment/keikaku006_2" },
-            { text: "007ゴール第4段階", link: "/coment/keikaku007" },
-            { text: "008挙動テスト", link: "/coment/keikaku008" },
-          ],
-        },
-        {
-          text: "バッチ開発",
-          collapsed: false,
-          items: [
-            { text: "009バッチ機能実装01", link: "/coment/keikaku009" },
-            { text: "グローバル状態管理", link: "/coment/groball_c" },
-          ],
-        },
-        {
-          text: "プロジェクト設定",
-          collapsed: false,
-          items: [{ text: "vercel.json", link: "/coment/vercel_json" }],
         },
       ],
     },
