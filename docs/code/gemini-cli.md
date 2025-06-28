@@ -6,7 +6,7 @@
 
 Get your Gemini API key from: https://makersuite.google.com/app/apikey
 
-GEMINI_API_KEY=AIzaSyBCrptruEPDjxcTbGxyLY4JBE-7wPWfO7A
+GEMINI_API_KEY=apikey
 
 ### Run the CLI: Execute the following command in your terminal:
 
