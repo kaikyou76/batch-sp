@@ -107,6 +107,14 @@ export default defineConfig({
       ],
       "/code/": [
         {
+          text: "開発ツール",
+          collapsed: true,
+          items: [
+            { text: "Gemini CLI", link: "/code/gemini-cli" },
+            { text: "Tailwind CSSセットアップ", link: "/code/css" },
+          ],
+        },
+        {
           text: "フロントエンド設定",
           collapsed: false,
           items: [
@@ -186,14 +194,6 @@ export default defineConfig({
           ],
         },
         {
-          text: "要件定義",
-          collapsed: false,
-          items: [
-            { text: "001-プロジェクトセットアップ", link: "/guide/kekaku1" },
-            { text: "推奨パッケージ一覧", link: "/guide/tools" },
-          ],
-        },
-        {
           text: "設計",
           collapsed: false,
           items: [
@@ -238,91 +238,71 @@ export default defineConfig({
           ],
         },
         {
-          text: "frontend開発",
-          collapsed: false,
-          items: [
-            { text: "商品一覧", link: "/guide/pr_list" },
-            { text: "ナビゲーション1.0", link: "/guide/nb" },
-            { text: "ナビゲーション2.0", link: "/guide/nb2" },
-            { text: "登録", link: "/guide/register" },
-            { text: "ログイン", link: "/guide/login" },
-            { text: "JWT認証開発", link: "/guide/jwt_ns" },
-            { text: "グローバル状態管理凡例", link: "/guide/groball" },
-            {
-              text: "状態管理AuthProvider1.0",
-              link: "/guide/auth_provider",
-            },
-            {
-              text: "状態管理AuthProvider2.0",
-              link: "/guide/auth_provider2",
-            },
-            {
-              text: "状態管理AuthProvider3.0",
-              link: "/guide/auth_provider3",
-            },
-            {
-              text: "状態管理AuthProvider4.0",
-              link: "/guide/auth_provider4",
-            },
-            {
-              text: "状態管理AuthProviderバッグ修正",
-              link: "/guide/auth_provider5",
-            },
-            { text: "ダッシュボード（管理画面）", link: "/guide/dashboard" },
-            { text: "会員管理画面1.0", link: "/guide/member1" },
-            { text: "管理者管理画面1.0", link: "/guide/admin1" },
-            { text: "管理者商品編集0.1", link: "/guide/product01" },
-          ],
-        },
-        {
           text: "backend開発",
           collapsed: false,
           items: [
             { text: "バッチ処理の開発1.0", link: "/guide/b_k01" },
             { text: "バッチ処理の開発3.0", link: "/guide/b_k03" },
-            { text: "1. 🔐 認証系API開発", link: "/guide/api1" },
-            { text: "商品作成🌟", link: "/guide/product_create" },
-            { text: "商品編集🌟", link: "/guide/product_edit" },
-            { text: "カテゴリ作成 API", link: "/guide/categories_create" },
-            { text: "api作成", link: "/guide/api5" },
-            { text: "api作成", link: "/guide/api6" },
-            { text: "api作成", link: "/guide/api7" },
-            { text: "api作成", link: "/guide/api8" },
-            { text: "api作成", link: "/guide/api9" },
-            { text: "api作成", link: "/guide/api10" },
-            { text: "api作成", link: "/guide/api11" },
           ],
         },
         {
-          text: "単体テスト",
-          collapsed: false,
-          items: [
-            { text: "0. 🔐 APIテスト設計簡略版", link: "/guide/api1_sekei" },
-            { text: "0. 🔐 APIテストコピペ", link: "/guide/api1_copi" },
-            { text: "1. 🔐 認証系API_登録・ログイン", link: "/guide/api1plan" },
-            { text: "1. 🔐 認証系API_ログアウト", link: "/guide/api1test" },
-            { text: "api作成", link: "/guide/api2" },
-            { text: "api作成", link: "/guide/api3" },
-            { text: "api作成", link: "/guide/api4" },
-            { text: "api作成", link: "/guide/api5" },
-            { text: "api作成", link: "/guide/api6" },
-            { text: "api作成", link: "/guide/api7" },
-            { text: "api作成", link: "/guide/api8" },
-            { text: "api作成", link: "/guide/api9" },
-            { text: "api作成", link: "/guide/api10" },
-            { text: "api作成", link: "/guide/api11" },
-          ],
-        },
-        {
-          text: "その他",
+          text: "バッチ実行API",
           collapsed: true,
           items: [
-            { text: "使い方ガイド", link: "/guide/" },
-            { text: "破棄予定002-基本ページの作成", link: "/guide/keikaku2" },
-            { text: "006-RestAPIの開発", link: "/guide/keikaku6" },
-            { text: "007-RestAPIのバージョンアップ", link: "/guide/keikaku7" },
-            { text: "工作目标", link: "/posts/memo" },
-            { text: "Next.js购物网站开发", link: "/posts/hello-react" },
+            {
+              text: "認証・検証・非同期処理の連携",
+              link: "/guide/batrch_api01",
+            },
+            {
+              text: "SecurityConfig",
+              link: "/guide/SecurityConfig",
+            },
+            {
+              text: "SecurityHandlerInterceptor",
+              link: "/guide/SecurityHandlerInterceptor",
+            },
+            {
+              text: "TokenManager",
+              link: "/guide/TokenManager",
+            },
+            {
+              text: "BatchJobController",
+              link: "/guide/BatchJobController",
+            },
+            {
+              text: "TokenHandler",
+              link: "/guide/TokenHandler",
+            },
+            {
+              text: "TokenValidateType",
+              link: "/guide/TokenValidateType",
+            },
+            {
+              text: "認証・検証・非同期処理の連携フィロー",
+              link: "/guide/batrch_api02",
+            },
+            {
+              text: "Next.js連携V3改造案",
+              link: "/guide/next_api_v3",
+            },
+            {
+              text: "Next.js連携R1改造案",
+              link: "/guide/next_api_R1",
+            },
+          ],
+        },
+        {
+          text: "バッチ実行API改造版",
+          collapsed: true,
+          items: [
+            {
+              text: "連携フロー",
+              link: "/guide/batrch_api_renkei01",
+            },
+            {
+              text: "トークン作成テスト",
+              link: "/guide/batrch_api_renkei02",
+            },
           ],
         },
       ],
@@ -465,6 +445,10 @@ export default defineConfig({
             {
               text: "job実行問題解決最新版",
               link: "/tutorial/batch_kakunin04",
+            },
+            {
+              text: "ポート 8080 使用中問題につき",
+              link: "/tutorial/batch_port8080",
             },
           ],
         },
