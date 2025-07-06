@@ -352,3 +352,101 @@ sequenceDiagram
 - Spring Batch 5.x の仕様に準拠
 - メタデータクリア不要な再実行可能設計
 - 一時的エラーと致命的エラーの区別処理
+
+---
+
+# Eclipse での実行構成の設定方法
+
+## 1. 実行構成ダイアログを開く
+
+- Eclipse のメニューバーから
+  **`Run` → `Run Configurations...`** を選択します。
+
+---
+
+## 2. 新しい Spring Boot アプリケーション構成を作成する
+
+- 左側のリストから **`Spring Boot App`** を右クリックし、
+  **`New Configuration`（新規構成）** を選択します。
+
+---
+
+## 3. 「Main」タブの設定
+
+- **Name（名前）**: 任意のわかりやすい名前を入力
+  例: `orgchart-api - humanResourceBatchJob (dev)`
+
+- **Project（プロジェクト）**:
+  `Browse...` をクリックし、プロジェクト（例: `orgchart-api`）を選択
+
+- **Main class（メインクラス）**:
+  `Search...` をクリックし、`com.example.orgchart_api.OrgchartApiApplication` を選択
+
+  > ※Spring Boot アプリケーションのエントリーポイントです。
+
+---
+
+## 4. 「Arguments」タブの設定
+
+- 「Arguments」タブを開きます。
+- **Program arguments（プログラム引数）** に以下を入力：
+
+  ```bash
+  --spring.batch.job.names=humanResourceBatchJob --spring.profiles.active=dev
+  ```
+
+  引数の意味：
+
+  - `--spring.batch.job.names=humanResourceBatchJob`:
+    実行する Spring Batch ジョブ名を指定
+  - `--spring.profiles.active=dev`:
+    アクティブな Spring プロファイルを `dev` に設定
+
+---
+
+## 5. 「JRE」タブの設定（通常はデフォルトで OK）
+
+- 「JRE」タブを開きます。
+- 通常は `Workspace default JRE` を使用すれば OK です。
+- 特定の Java バージョンを使いたい場合はここで指定します。
+
+---
+
+## 6. 「Classpath」タブの設定（通常はデフォルトで OK）
+
+- 「Classpath」タブを開きます。
+- `Default Classpath` をそのまま使用すれば OK です。
+- プロジェクトの依存関係が正しく設定されているか確認してください。
+
+---
+
+## 7. 適用して実行
+
+- 全ての設定が完了したら **「Apply」** をクリックして保存
+- その後、**「Run」** をクリックしてアプリケーションを起動
+
+---
+
+## 補足
+
+- `java -jar target/orgchart-api-0.0.1-SNAPSHOT.jar` の実行は、
+  Eclipse の **Spring Boot App 構成** により自動的に行われるため、手動入力は不要です。
+
+- **複数のジョブを実行したい場合**：
+
+  ```bash
+  --spring.batch.job.names=job1,job2
+  ```
+
+- **複数のプロファイルを指定したい場合**：
+
+  ```bash
+  --spring.profiles.active=dev,batch
+  ```
+
+---
+
+## ✅ この設定を行うことで
+
+Eclipse から簡単に **特定の Spring Batch ジョブ** を
+**特定のプロファイル**で実行できるようになります。

@@ -81,4 +81,101 @@ SELECT usename FROM pg_user;
 
 ---
 
-必要であれば、**pgAdmin から新しいデータベースユーザーを GUI で作成する手順**もお伝えできます。興味ありますか？
+## 🚀✅ **パスワードを忘れた場合**
+
+パースワードを忘れた場合は以下の手順でパスワードリセットする必要があります。
+
+---
+
+### **🔑 パスワードリセット手順（Windows 版）**
+
+#### **1. PostgreSQL サービスを停止**
+
+```powershell
+# 管理者権限でPowerShellを開き実行
+Stop-Service postgresql-x64-13 -Force
+```
+
+```powershell
+PS C:\Users\kaikyou> Get-Service | Where-Object { $_.DisplayName -like "*PostgreSQL*" }
+
+Status   Name               DisplayName
+------   ----               -----------
+Stopped  postgresql-x64-13  postgresql-x64-13 - PostgreSQL Serv...
+
+
+PS C:\Users\kaikyou>
+```
+
+#### **2. パスワードチェックを無効化**
+
+1. 以下のファイルをメモ帳で開きます（管理者権限が必要）:
+   ```
+   C:\Program Files\PostgreSQL\13\data\pg_hba.conf
+   ```
+2. **最初の設定ブロック**を以下のように変更:
+   ```diff
+   - host    all             all             127.0.0.1/32            md5
+   + host    all             all             127.0.0.1/32            trust
+   ```
+
+#### **3. PostgreSQL サービス再起動**
+
+```powershell
+Start-Service postgresql-x64-13
+```
+
+#### **4. パスワード再設定**
+
+```powershell
+# PostgreSQLにパスワードなしで接続
+& "C:\Program Files\PostgreSQL\13\bin\psql.exe" -U postgres
+
+# パスワード変更コマンド実行（psql内で）
+ALTER USER postgres WITH PASSWORD '新しいパスワード';
+\q
+```
+
+#### **5. 設定を元に戻す**
+
+1. `pg_hba.conf` を再編集:
+   ```diff
+   - host    all             all             127.0.0.1/32            trust
+   + host    all             all             127.0.0.1/32            md5
+   ```
+2. サービス再起動:
+   ```powershell
+   Restart-Service postgresql-x64-13
+   ```
+
+---
+
+### **✅ pgAdmin 4 での接続方法**
+
+1. サーバー接続ダイアログで:
+   - **Username**: `postgres`
+   - **Password**: 先ほど設定した新しいパスワード
+   - **Save Password** にチェック ✔
+
+---
+
+### **⚠️ 注意点**
+
+- **デフォルトパスワード**が分かる場合（インストール時にメモしたなど）は、それを使用してください
+- この方法は**ローカル環境のみ**で実行してください（本番環境では危険）
+- パスワードは必ずメモしておくこと
+
+---
+
+### **🔍 パスワードが分かる場合の確認方法**
+
+1. インストール時のメモを探す
+2. 以下の場所にパスワードが保存されている可能性:
+   ```
+   C:\Program Files\PostgreSQL\13\installer.log
+   ```
+3. 他の管理者に確認
+
+---
+
+この手順で必ず接続できるようになります。パスワード変更後は、**pgAdmin の接続設定も更新**するのを忘れずに！

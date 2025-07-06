@@ -5,6 +5,22 @@
 `irdb-schema-new.sql`
 
 ```sql
+CREATE TABLE public.users (
+    id SERIAL PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    name TEXT,
+    role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL
+);
+
+COMMENT ON TABLE public.users IS 'アプリケーション認証用ユーザーマスタ';
+COMMENT ON COLUMN public.users.email IS 'ログインIDとして使用するメールアドレス';
+COMMENT ON COLUMN public.users.password_hash IS 'PBKDF2アルゴリズムでハッシュ化されたパスワード';
+COMMENT ON COLUMN public.users.role IS 'ユーザーロール: user(一般), admin(管理者)';
+
 -- 店舗マスタ
 CREATE TABLE public.mst_branch (
     branch_id SERIAL PRIMARY KEY,
@@ -650,6 +666,22 @@ CREATE INDEX idx_trn_phone_device ON trn_phone(device_type_id);
 `外部キーなしirdb-schema-new.sql`
 
 ```sql
+CREATE TABLE public.users (
+    id SERIAL PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    name TEXT,
+    role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+    create_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_date TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    update_user VARCHAR(50) DEFAULT 'BATCH' NOT NULL
+);
+
+COMMENT ON TABLE public.users IS 'アプリケーション認証用ユーザーマスタ';
+COMMENT ON COLUMN public.users.email IS 'ログインIDとして使用するメールアドレス';
+COMMENT ON COLUMN public.users.password_hash IS 'PBKDF2アルゴリズムでハッシュ化されたパスワード';
+COMMENT ON COLUMN public.users.role IS 'ユーザーロール: user(一般), admin(管理者)';
+
 -- 店舗マスタ
 CREATE TABLE public.mst_branch (
     branch_id SERIAL PRIMARY KEY,

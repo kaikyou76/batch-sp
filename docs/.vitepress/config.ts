@@ -55,6 +55,7 @@ export default defineConfig({
       { text: "👤 私について", link: "/about/me" },
       { text: "📒 設定について", link: "/code/" },
       { text: "📒 説明", link: "/coment/" },
+      { text: "📒 フロント", link: "/frontend/" },
     ],
 
     sidebar: {
@@ -102,10 +103,39 @@ export default defineConfig({
               text: "⑦ブランチ保護設定）",
               link: "/about/branch-hogo",
             },
+            {
+              text: "現在作業ブランチ状況",
+              link: "/about/Working_Branch",
+            },
           ],
         },
       ],
       "/code/": [
+        {
+          text: "awsデプロイ計画",
+          collapsed: true,
+          items: [
+            { text: "awsデプロイ方法", link: "/code/aws-cli" },
+            { text: "awsプラン", link: "/code/aws-cli02" },
+            { text: "手動でデプロイ", link: "/code/aws-cli03" },
+            { text: "基本手順書", link: "/code/aws-cli04" },
+            { text: "詳細手順書", link: "/code/aws-cli05" },
+          ],
+        },
+        {
+          text: "awsデプロイ実践",
+          collapsed: true,
+          items: [
+            {
+              text: "awsアカウントとインスタンスの作成",
+              link: "/code/aws-account",
+            },
+            { text: "インスタンス起動後の作業", link: "/code/aws-account02" },
+            { text: "データベースの構築", link: "/code/aws-account02_2" },
+            { text: "起動エラー解決", link: "/code/aws-account03" },
+            { text: "コマンド説明", link: "/code/aws-account04" },
+          ],
+        },
         {
           text: "開発ツール",
           collapsed: true,
@@ -146,6 +176,22 @@ export default defineConfig({
             { text: "Render環境変数設定", link: "/code/r_kankyou" },
             { text: "Maven の高速実行ツール", link: "/code/MavenDaemon" },
             { text: "pom.xml依存関係解決", link: "/code/pom" },
+            {
+              text: "ローカルPostgreSQL15のインストール",
+              link: "/code/PostgreSQL15",
+            },
+            {
+              text: "AWSのPostgreSQL15のインストール",
+              link: "/code/AWSPostgreSQL15",
+            },
+            {
+              text: "postgresql自動起動設定（オプション）",
+              link: "/code/vi.postgresql.service",
+            },
+            {
+              text: "サービスを有効化エラー",
+              link: "/code/start.err",
+            },
             { text: "データベース削除", link: "/code/db_delete" },
             { text: "データベーススキーマ取得", link: "/code/db_schema" },
             { text: "pg_adminセキュリティー", link: "/code/pg_admin" },
@@ -191,6 +237,7 @@ export default defineConfig({
             { text: "改修企画案001", link: "/guide/kaisyu001" },
             { text: "改修企画案002", link: "/guide/kaisyu002" },
             { text: "スキーマ整理", link: "/guide/kaisyu003" },
+            { text: "ER図", link: "/guide/kaisyu004" },
           ],
         },
         {
@@ -302,6 +349,94 @@ export default defineConfig({
             {
               text: "トークン作成テスト",
               link: "/guide/batrch_api_renkei02",
+            },
+          ],
+        },
+        {
+          text: "新規登録について",
+          collapsed: true,
+          items: [
+            {
+              text: "✅ 新規ユーザー登録",
+              link: "/guide/new_register01",
+            },
+            {
+              text: "01_JwtAuthenticationFilter",
+              link: "/guide/JwtAuthenticationFilter",
+            },
+            {
+              text: "JwtUtil",
+              link: "/guide/JwtUtil",
+            },
+            {
+              text: "02_SecurityHandlerInterceptor",
+              link: "/guide/SecurityHandlerInterceptor",
+            },
+            {
+              text: "TokenHandler",
+              link: "/guide/TokenHandler",
+            },
+            {
+              text: "TokenManager",
+              link: "/guide/TokenManager",
+            },
+            {
+              text: "03_RegisterController",
+              link: "/guide/RegisterController",
+            },
+            {
+              text: "User",
+              link: "/guide/User",
+            },
+            {
+              text: "04_AuthenticationService",
+              link: "/guide/AuthenticationService",
+            },
+            {
+              text: "05_UserRepository",
+              link: "/guide/UserRepository",
+            },
+            {
+              text: "06_User",
+              link: "/guide/User",
+            },
+            {
+              text: "07_JwtUtil",
+              link: "/guide/JwtUtil",
+            },
+            {
+              text: "08_AuthResponse",
+              link: "/guide/AuthResponse",
+            },
+            {
+              text: "⭐️ ⭐️ ⭐️ ⭐️ ⭐️ 処理フローの詳細",
+              link: "/guide/Processingflow",
+            },
+            {
+              text: "✅⭐️登録後のアプローチ",
+              link: "/guide/approach",
+            },
+          ],
+        },
+        {
+          text: "ログインについて",
+          collapsed: true,
+          items: [
+            {
+              text: "既存ロジック確認",
+              link: "/guide/logic_kakunin01",
+            },
+            {
+              text: "ログイン処理の流れ",
+              link: "/guide/loginProcessingflow",
+            },
+            {
+              text: "❗🚨AuthControllereとフロントエンドの連携問題",
+              link: "/guide/AuthController",
+            },
+            {
+              text: "⭐️ ⭐️ ⭐️ ⭐️ ⭐️ 処理フローの詳細",
+              link: "/guide/loginProcessingflow02",
             },
           ],
         },
@@ -428,6 +563,21 @@ export default defineConfig({
             {
               text: "job実行問題解決最新版",
               link: "/tutorial/batch_kakunin04",
+            },
+            { text: "pom.xmlの重要確認更新", link: "/tutorial/pomxml_check" },
+            {
+              text: "registerのtest",
+              link: "/tutorial/register_test",
+            },
+          ],
+        },
+        {
+          text: "バッチ開発コード分析",
+          collapsed: true,
+          items: [
+            {
+              text: "FileSystemWrite",
+              link: "/tutorial/FileSystemWrite",
             },
           ],
         },
@@ -632,6 +782,111 @@ export default defineConfig({
             {
               text: "🔍上記単体と統合の違い",
               link: "/tutorial/MockIntegration_m",
+            },
+          ],
+        },
+      ],
+      "/frontend/": [
+        {
+          text: "基盤の理解",
+          collapsed: true,
+          items: [
+            { text: "プロジェクト開発の計画", link: "/frontend/pro_pla" },
+            { text: "Tailwind CSS", link: "/frontend/TailwindCSS" },
+            { text: "layout.tsx", link: "/frontend/base_likai" },
+            { text: "Header.tsx", link: "/frontend/Header.tsx" },
+            { text: "Footer.tsx", link: "/frontend/Footer.tsx" },
+            { text: "将来使用useAuth.ts", link: "/frontend/useAuth.ts" },
+            { text: "AuthProvider.tsx", link: "/frontend/AuthProvider.tsx" },
+            { text: "register.tsx", link: "/frontend/register.tsx" },
+            { text: "login.tsx", link: "/frontend/login.tsx" },
+            {
+              text: "操作画面エラー明示したい場合",
+              link: "/frontend/err_front",
+            },
+          ],
+        },
+        {
+          text: "バッチ実行について",
+          collapsed: true,
+          items: [
+            { text: "プッシュ通知追加", link: "/frontend/job_kaizan01" },
+            { text: "ステップごとの進捗表示", link: "/frontend/job_kaizan02" },
+            { text: "非同期エラー", link: "/frontend/job_kaizan03" },
+            { text: "全体確認と修正", link: "/frontend/job_kaizan04" },
+            {
+              text: "✅ ジョブID ライフサイクル管理フロー",
+              link: "/frontend/job_kaizan05",
+            },
+          ],
+        },
+        {
+          text: "記事",
+          collapsed: true,
+          items: [
+            { text: "フロントディレクトリの構成", link: "/frontend/fron_dir" },
+            { text: "バックエンドとの連携案", link: "/frontend/front_back" },
+          ],
+        },
+        {
+          text: "フロント開発",
+          collapsed: true,
+          items: [
+            { text: "ログイン後の処理01", link: "/frontend/login_001" },
+            { text: "ログイン後の処理02", link: "/frontend/login_002" },
+            { text: "ログイン後の処理03", link: "/frontend/login_003" },
+            {
+              text: "❗🚨AuthProvider.tsxとバックエンドAuthControllereの連携問題",
+              link: "/frontend/AuthProvider",
+            },
+            {
+              text: "🚀ログアウト処理はバックエンドと連携？",
+              link: "/frontend/AuthProvider02",
+            },
+          ],
+        },
+        {
+          text: "メモ帳",
+          collapsed: true,
+          items: [
+            { text: "EntityとDTOの違い", link: "/posts/memo01" },
+            {
+              text: "UserMapper インターフェースについて",
+              link: "/posts/memo02",
+            },
+            {
+              text: "UserRepository インターフェースについて",
+              link: "/posts/memo03",
+            },
+            {
+              text: "UserRepositoryとUserMapper両方必要❌",
+              link: "/posts/memo04",
+            },
+            {
+              text: "重大問題見直す✅ ",
+              link: "/posts/memo05",
+            },
+            {
+              text: "実装の優先順位✅ ",
+              link: "/posts/memo06",
+            },
+          ],
+        },
+        {
+          text: "spring batchの一部流れ",
+          collapsed: true,
+          items: [
+            {
+              text: "HumanResourceJobConfig",
+              link: "/posts/HumanResourceJobConfig",
+            },
+            {
+              text: "ActiveDirectory情報の読み込み例",
+              link: "/posts/ActiveDirectory",
+            },
+            {
+              text: "job実行成功DEBUG情報",
+              link: "/posts/job_debug",
             },
           ],
         },

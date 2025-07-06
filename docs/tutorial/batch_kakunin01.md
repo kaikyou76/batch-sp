@@ -92,7 +92,7 @@ psql -U postgres -d irdb -f "C:\Users\YourName\Downloads\org\springframework\bat
 ![alt text](image-16.png)
 
 ```bash
-cd "C:\Program Files\PostgreSQL\13\bin"
+cd "C:\Program Files\PostgreSQL\15\bin"
 ```
 
 ```bash
@@ -104,9 +104,6 @@ cd "C:\Program Files\PostgreSQL\13\bin"
 - `-f`：SQL ファイルのフルパス
 - 次
   ![alt text](image-17.png)
-
-- 次
-  ![alt text](image-18.png)
 
 完了メッセージを見る限り、**指定したデータベース `irdb` に対して、Spring Batch のスキーマが正常に作成されました。**
 つまり、あなたの使っているデータベース名は **`irdb`** で正しいです。
