@@ -181,8 +181,20 @@ export default defineConfig({
               link: "/code/PostgreSQL15",
             },
             {
-              text: "AWSのPostgreSQL15のインストール",
+              text: "①⚠️AWSのPostgreSQL15のインストール",
               link: "/code/AWSPostgreSQL15",
+            },
+            {
+              text: "②🔥💥❗AWSのPostgreSQL15の指摘",
+              link: "/code/AWSPostgreSQL15_s",
+            },
+            {
+              text: "③✅🏗️👑AWSのPostgreSQL15の再インストール",
+              link: "/code/AWSPostgreSQL15_sis",
+            },
+            {
+              text: "ローカルpgAdmin4とE2のPostgreSQL15連携",
+              link: "/code/pgAdmin4E2",
             },
             {
               text: "postgresql自動起動設定（オプション）",
@@ -191,6 +203,18 @@ export default defineConfig({
             {
               text: "サービスを有効化エラー",
               link: "/code/start.err",
+            },
+            {
+              text: "ポート 5432 使用中問題",
+              link: "/code/port_ari",
+            },
+            {
+              text: "SSM Session Manager",
+              link: "/code/SSMSessionManager",
+            },
+            {
+              text: "最終手段（初期化）",
+              link: "/code/postgresql.reset",
             },
             { text: "データベース削除", link: "/code/db_delete" },
             { text: "データベーススキーマ取得", link: "/code/db_schema" },
