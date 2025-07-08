@@ -77,6 +77,40 @@ host    replication     all             127.0.0.1/32            scram-sha-256
 host    replication     all             ::1/128                 scram-sha-256
 ```
 
+最新版
+
+```
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# Unix domain socket (ローカルのみ)
+local   all             all                                     peer
+
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            scram-sha-256
+
+# IPv6 local connections:
+host    all             all             ::1/128                 scram-sha-256
+
+# IPv4 remote connections
+host    all             all             0.0.0.0/0               scram-sha-256
+
+# IPv6 remote connections
+host    all             all             ::/0                    scram-sha-256
+
+# pgAdmin からの接続許可（postgres ユーザ）
+host    all             postgres        ::/0                    scram-sha-256
+host    all             postgres        0.0.0.0/0               scram-sha-256
+
+# backup_user によるリモートバックアップ用接続許可
+host    all             backup_user     0.0.0.0/0               scram-sha-256
+host    all             backup_user     ::/0                    scram-sha-256
+
+# Replication（オプション）
+local   replication     all                                     peer
+host    replication     all             127.0.0.1/32            scram-sha-256
+host    replication     all             ::1/128                 scram-sha-256
+```
+
 - PostgreSQL 設定の反映（再読み込み）
 
 ```bash

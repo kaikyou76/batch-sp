@@ -51,8 +51,8 @@ ssh -i my-key.pem ec2-user@<パブリックIPv4アドレス>
 ## ✅ 2 SSH で接続してみる
 
 ```bash
-chmod 400 "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem"
-ssh -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem" ec2-user@35.78.191.119
+chmod 400 "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan2.pem"
+ssh -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan2.pem" ec2-user@13.114.183.62
 ```
 
 ![alt text](image-12.png)
@@ -118,10 +118,12 @@ java -version
 
 PowerShell または Git Bash に以下を入力し、先ほどダウンロードした `.pem` キーと生成された `.jar` を指定します：
 
+⚠️ 注意:例を挙がるだけで実行できない ❗
+
 ```bash
-scp -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem" \
+scp -i "/c/Users/kaikyou/Downloads/swa-key/your-key-pair-xxx.pem" \
   /c/path/to/orgchart-api/target/orgchart-api-0.0.1-SNAPSHOT.jar \
-  ec2-user@35.78.191.119:/home/ec2-user/
+  ec2-user@13.114.183.62:/home/ec2-user/
 ```
 
 - `/c/path/to/…` を実際の `.jar` のあるパスに書き換えてください。
@@ -139,12 +141,12 @@ logout
 Connection to 35.78.191.119 closed.
 ```
 
-- .jar を EC2 に転送（SCP を使う）
+- .jar を EC2 に転送（SCP を使う）🌐 ここから転送する
 
 ```bash
-scp -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem" \
+scp -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan2.pem" \
   "/d/eclipse-workspace/orgchart-api/target/orgchart-api-0.0.1-SNAPSHOT.jar" \
-  ec2-user@35.78.191.119:/home/ec2-user/
+  ec2-user@13.114.183.62:/home/ec2-user/
 ```
 
 ![alt text](image-16.png)
@@ -154,8 +156,8 @@ scp -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem" \
 先程の Git Bash で再度 SSH 接続し、次のコマンドでファイルを確認します：
 
 ```bash
-chmod 400 "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem"
-ssh -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem" ec2-user@35.78.191.119
+chmod 400 "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan2.pem"
+ssh -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan2.pem" ec2-user@13.114.183.62
 ls -l /home/ec2-user/orgchart-api-0.0.1-SNAPSHOT.jar
 ```
 

@@ -219,6 +219,16 @@ export default defineConfig({
             { text: "データベース削除", link: "/code/db_delete" },
             { text: "データベーススキーマ取得", link: "/code/db_schema" },
             { text: "pg_adminセキュリティー", link: "/code/pg_admin" },
+            {
+              text: "🔴🟢🟡🧰springとnextの連携",
+              collapsed: true,
+              items: [
+                {
+                  text: "前提条件",
+                  link: "/code/jyouken",
+                },
+              ],
+            },
           ],
         },
       ],

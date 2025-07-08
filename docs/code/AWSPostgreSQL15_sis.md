@@ -94,8 +94,6 @@ sudo make install -C src/include
 sudo make install -C src/interfaces
 ```
 
----
-
 ### 👤 Step 4: PostgreSQL ユーザー・データディレクトリの作成
 
 ```bash
@@ -162,6 +160,40 @@ host    all             all             0.0.0.0/0               trust
 ```
 
 > ⚠️ 運用環境では `trust` → `md5` などに変更してください
+
+最新版
+
+```
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# Unix domain socket (ローカルのみ)
+local   all             all                                     peer
+
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            scram-sha-256
+
+# IPv6 local connections:
+host    all             all             ::1/128                 scram-sha-256
+
+# IPv4 remote connections
+host    all             all             0.0.0.0/0               scram-sha-256
+
+# IPv6 remote connections
+host    all             all             ::/0                    scram-sha-256
+
+# pgAdmin からの接続許可（postgres ユーザ）
+host    all             postgres        ::/0                    scram-sha-256
+host    all             postgres        0.0.0.0/0               scram-sha-256
+
+# backup_user によるリモートバックアップ用接続許可
+host    all             backup_user     0.0.0.0/0               scram-sha-256
+host    all             backup_user     ::/0                    scram-sha-256
+
+# Replication（オプション）
+local   replication     all                                     peer
+host    replication     all             127.0.0.1/32            scram-sha-256
+host    replication     all             ::1/128                 scram-sha-256
+```
 
 ---
 
@@ -255,7 +287,87 @@ srwxrwxrwx 1 postgres postgres 0 Jul  6 18:20 /var/run/postgresql/.s.PGSQL.5432
 
 ---
 
-### 🔄 Step 12: バックアップと復元の設定
+### ⚙️ Step 12: もし PostgreSQL15 のパスワードがまだ作成していない場合、作成する必要があります。（作成済み場合、このステップをスキップしてください。）
+
+```bash
+ALTER USER postgres WITH PASSWORD 'your_secure_password';
+```
+
+### 🪜 Step 13: クライアント(端末)pgAdmin4 から EC2 の PostgreSQL15 にアクセスできるように設定する
+
+①[設定方法](pgAdmin4E2)
+
+②pgAdmin4 で irdb データベースを作成する。
+
+### 🛠 Step 14:`pg_dump` を使うためには対象データベースへの「読み取り専用アクセス権限」を設定します。
+
+具体的には以下のような条件を満たす必要があります：
+
+| 項目                       | 説明                                                                             |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| ログイン可能ユーザ         | PostgreSQL に接続できるユーザ（通常 `postgres`）                                 |
+| 対象 DB の SELECT 権限     | `pg_dump` はテーブル定義とデータを読み取るため、全テーブルの `SELECT` 権限が必要 |
+| システムカタログの参照権限 | スキーマ情報取得のために必要                                                     |
+
+## 🛠️ 推奨されるユーザ権限設定（PostgreSQL）
+
+### ① 専用ユーザ作成（例: `backup_user`）
+
+```sql
+CREATE USER backup_user WITH PASSWORD 'your_secure_password';
+```
+
+### ② 対象データベース（例: `irdb`）に対して読み取り権限を付与
+
+```sql
+GRANT CONNECT ON DATABASE irdb TO backup_user;
+GRANT USAGE ON SCHEMA public TO backup_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO backup_user;
+```
+
+### ③ 新規テーブルにも自動で権限を適用（オプション）
+
+```sql
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO backup_user;
+```
+
+---
+
+## 📌 実行コマンド例（`pg_dump`）
+
+権限が正しく設定されていれば、以下のように実行できます：
+
+```bash
+pg_dump -h localhost -U backup_user -Fc irdb > irdb_backup.dump
+```
+
+- `-h`: データベースホスト（ローカルなら `localhost`）
+- `-U`: 使用するユーザ名
+- `-Fc`: 圧縮フォーマットで出力（カスタム形式）
+
+---
+
+## 🔒 注意事項
+
+- **スーパーユーザ権限 (`SUPERUSER`) は不要**です。
+- **暗号化や ACL 制限がある場合**は、`.pgpass` ファイルなどでパスワードを非対話的に指定してください：
+  ```bash
+  echo "localhost:5432:irdb:backup_user:your_secure_password" > ~/.pgpass
+  chmod 600 ~/.pgpass
+  ```
+
+## 📋 完了チェックリスト
+
+| 項目                                         | 状況 |
+| -------------------------------------------- | ---- |
+| 専用ユーザ作成済み                           | ✅   |
+| `CONNECT`, `USAGE`, `SELECT` 権限を付与      | ✅   |
+| `.pgpass` によるパスワード管理（オプション） | ✅   |
+| `pg_dump` コマンド実行テスト                 | ✅   |
+
+#############補助説明完了############
+
+### 🔄 Step 15: バックアップと復元の設定
 
 #### 💾 1. SQL 形式で出力（プレーンテキスト）
 
@@ -297,7 +409,7 @@ cd /usr/local/pgsql/bin/
 
 ---
 
-### 🛡️ Step 13: EC2 セキュリティグループ設定（外部接続が必要な場合）
+### 🛡️ Step 16: EC2 セキュリティグループ設定（外部接続が必要な場合）
 
 AWS コンソールまたは CLI で、ポート `5432` を解放します。
 

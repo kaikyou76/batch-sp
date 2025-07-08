@@ -2,7 +2,9 @@
 
 ## ✅ PostgreSQL15 をインストール
 
-[PostgreSQL15 インストール手順](AWSPostgreSQL15)
+❌ 破棄[PostgreSQL15 インストール手順](AWSPostgreSQL15)
+
+✅🏗️👑[再度 PostgreSQL 15 ソースインストール計画 📦 Step 2 から](AWSPostgreSQL15_sis)
 
 ## ✅ pgAdmin をインストール
 
@@ -85,8 +87,8 @@ listen_addresses = '*'
 🔧 実行する
 
 ```bash
-chmod 400 "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem"
-ssh -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan.pem" ec2-user@35.78.191.119
+chmod 400 "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan2.pem"
+ssh -i "/c/Users/kaikyou/Downloads/swa-key/my-key-pair-japan2.pem" ec2-user@13.114.183.62
 ```
 
 ![alt text](image-45.png)
