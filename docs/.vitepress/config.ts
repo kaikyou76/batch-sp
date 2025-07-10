@@ -109,6 +109,11 @@ export default defineConfig({
             },
           ],
         },
+        {
+          text: "新規プロジェクトの計画",
+          collapsed: true,
+          items: [{ text: "新規プロジェクト", link: "/about/sinki01" }],
+        },
       ],
       "/code/": [
         {
@@ -134,6 +139,20 @@ export default defineConfig({
             { text: "データベースの構築", link: "/code/aws-account02_2" },
             { text: "起動エラー解決", link: "/code/aws-account03" },
             { text: "コマンド説明", link: "/code/aws-account04" },
+            {
+              text: "📌本番環境向けの HTTPS 設定",
+              link: "/code/aws-account05",
+            },
+          ],
+        },
+        {
+          text: "環境別設定",
+          collapsed: true,
+          items: [
+            {
+              text: "SSL/TLS 環境別設定",
+              link: "/code/dev.pro",
+            },
           ],
         },
         {
@@ -271,7 +290,10 @@ export default defineConfig({
             { text: "改修企画案001", link: "/guide/kaisyu001" },
             { text: "改修企画案002", link: "/guide/kaisyu002" },
             { text: "スキーマ整理", link: "/guide/kaisyu003" },
+            { text: "推測した要件定義", link: "/guide/kaisyu003_02" },
+            { text: "🧩 提案概要", link: "/guide/kaisyu003_03" },
             { text: "ER図", link: "/guide/kaisyu004" },
+            { text: "PMとしての主な役割", link: "/guide/kaisyu005" },
           ],
         },
         {
@@ -839,6 +861,11 @@ export default defineConfig({
               link: "/frontend/err_front",
             },
           ],
+        },
+        {
+          text: "AWS Amplifyへのデプロイ",
+          collapsed: true,
+          items: [{ text: "githubからAWSへ", link: "/frontend/github_aws" }],
         },
         {
           text: "バッチ実行について",

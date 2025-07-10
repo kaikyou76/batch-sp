@@ -130,20 +130,16 @@ ls -l /home/ec2-user/batch/input/
 
 ### RegisterController (POST /register)
 
-```bash
-curl -X POST http://ec2-xx-xxx-xxx-xxx.compute-1.amazonaws.com:8080/api/register \
-     -H "Content-Type: application/json" \
-     -d '{"email":"newuser@example.com", "name":"New User", "password":"pass"}'
-```
-
 ![alt text](image-90.png)
-⭕️ 実施する
 
-```
-curl -X POST http://ec2-13-114-183-62.ap-northeast-1.compute.amazonaws.com:8080/api/register \
+```bash
+	 curl -X POST http://ec2-13-114-183-62.ap-northeast-1.compute.amazonaws.com:8081/api/register \
      -H "Content-Type: application/json" \
-     -d '{"email":"kaikyou@gmail.com", "name":"NewUser", "password":"password"}'
+     -d '{"email":"kaikyou@gmail.com", "name":"NewUser", "password":"password123"}'
 ```
+
+⭕️ 実施する
+![alt text](image-95.png)
 
 ### AuthController (POST /login)
 

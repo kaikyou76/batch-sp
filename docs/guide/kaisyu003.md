@@ -4,6 +4,8 @@
 
 `irdb-schema-new.sql`
 
+[提供された DDL （スキーマ定義：CREATE TABLE など）から、要件定義と基本設計の一部を推測・整理します。](kaisyu003_02)
+
 ```sql
 CREATE TABLE public.users (
     id SERIAL PRIMARY KEY,

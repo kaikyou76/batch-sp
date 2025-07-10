@@ -169,7 +169,7 @@ ls -l /home/ec2-user/orgchart-api-0.0.1-SNAPSHOT.jar
 ## ▶️ Step 4: Spring Boot アプリを起動
 
 ```bash
-java -jar orgchart-api-0.0.1-SNAPSHOT.jar
+DB_PASSWORD=AM2013japan java -jar orgchart-api-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
 - `application.properties` の設定で `server.port=8081` になっているので、Spring Boot は **ポート 8081** で起動されます。
