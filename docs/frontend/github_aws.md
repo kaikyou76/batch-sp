@@ -39,17 +39,10 @@ AWS Amplify を使用して React/Next.js フロントエンドを GitHub 経由
 ## ⚙️ ステップ 2: API エンドポイントの設定（環境変数）
 
 1. Amplify コンソールの「App settings」 > 「Environment variables」へ移動。
-2. `VITE_API_URL` などの環境変数を追加し、値を EC2 の Spring Boot API URL に設定（例：`http://ec2-xx-xxx-xxx-xxx.compute-1.amazonaws.com:8080`）。
+2. `NEXT_PUBLIC_API_BASE_URL` などの環境変数を追加し、値を EC2 の Spring Boot API URL に設定（例：`http://ec2-xx-xxx-xxx-xxx.compute-1.amazonaws.com:8080`）。
    ![alt text](image-12.png)
    ![alt text](image-13.png)
 3. React/Next.js 側のコード内でこの環境変数を使用して API 通信を行います。
-
-```javascript
-// 例: fetch 使用
-const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users`);
-```
-
-> ⚠️ 注意: VITE\_ などのプレフィックスが必要（Vite ベースの場合）
 
 ---
 

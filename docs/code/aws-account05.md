@@ -75,6 +75,11 @@ Not After :  Oct 1 23:59:59 2025 GMT
 ## 🔍 有効期限の確認方法（Linux）
 
 ```bash
+#一時的に読み取り権限を付ける
+sudo chmod 644 myapi.p12
+```
+
+```bash
 # myapi.p12 の証明書の有効期限を確認する
 openssl pkcs12 -in myapi.p12 -nokeys -clcerts
 ```
@@ -90,6 +95,13 @@ openssl pkcs12 -in myapi.p12 -nokeys -clcerts | openssl x509 -noout -dates
 ```
 notBefore=Jul  1 00:00:00 2025 GMT
 notAfter=Oct  1 23:59:59 2025 GMT
+```
+
+![alt text](image-96.png)
+
+```bash
+#作業後はセキュリティを戻す
+sudo chmod 600 myapi.p12
 ```
 
 ---
