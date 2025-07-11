@@ -181,6 +181,7 @@ server.ssl.key-alias=myapi.example.com
 ## ✅ `.env` ファイル（.env.prod）
 
 このファイルはプロジェクトルートなどに配置して、セキュリティ情報や環境依存値を外部化します。
+まずは EC2 の/home/ec2-user/にアプロードするか作成する必要があります。
 
 ```env
 # ======================
@@ -188,7 +189,7 @@ server.ssl.key-alias=myapi.example.com
 # ======================
 SPRING_DATASOURCE_URL=jdbc:postgresql://13.114.183.62:5432/irdb
 SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=AM2013japan
+SPRING_DATASOURCE_PASSWORD=AM20****13201****3japan
 
 # ======================
 # キーストア設定
