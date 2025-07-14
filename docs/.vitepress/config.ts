@@ -197,6 +197,14 @@ export default defineConfig({
               text: "Meet Claudia 導入版使用手順",
               link: "/code/Meet_Claudia03",
             },
+            {
+              text: "別のパソコンにコピーして使う",
+              link: "/code/Meet_Claudia04",
+            },
+            {
+              text: "Cursor（カーソル）との比較",
+              link: "/code/Meet_Claudia05",
+            },
           ],
         },
         {
