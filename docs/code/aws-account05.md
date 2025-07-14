@@ -189,7 +189,7 @@ server.ssl.key-alias=myapi.example.com
 # ======================
 SPRING_DATASOURCE_URL=jdbc:postgresql://13.114.183.62:5432/irdb
 SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=AM20****13201****3japan
+SPRING_DATASOURCE_PASSWORD=AM20****1*201****0japan
 
 # ======================
 # キーストア設定
@@ -307,7 +307,12 @@ set -o allexport
 source .env.prod
 set +o allexport
 
-nohup java -jar orgchart-api.jar --spring.profiles.active=prod > app.log 2>&1 &
+nohup java -jar orgchart-api-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > app.log 2>&1 &
+```
+
+```bash
+#ログ出力をリアルタイムで確認
+tail -f app.log
 ```
 
 ---
@@ -315,7 +320,7 @@ nohup java -jar orgchart-api.jar --spring.profiles.active=prod > app.log 2>&1 &
 ## ✅ `.env` を使わない場合の直書き実行例（非推奨）
 
 ```bash
-SPRING_DATASOURCE_PASSWORD=AM2013japan \
+SPRING_DATASOURCE_PASSWORD=AM20****1*201****0japan \
 SPRING_SSL_KEY_STORE_PASSWORD=strong_keystore_password_2025 \
 nohup java -jar orgchart-api.jar --spring.profiles.active=prod > app.log 2>&1 &
 ```
@@ -352,7 +357,7 @@ set -o allexport
 source .env.prod
 set +o allexport
 
-nohup java -jar orgchart-api.jar --spring.profiles.active=prod > app.log 2>&1 &
+nohup java -jar orgchart-api-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > app.log 2>&1 &
 ```
 
 このコマンドにより、以下のような処理が行われます：
@@ -479,7 +484,7 @@ source .env.prod
 set +o allexport
 
 # アプリケーション起動
-nohup java -jar orgchart-api.jar --spring.profiles.active=prod > app.log 2>&1 &
+nohup java -jar orgchart-api-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > app.log 2>&1 &
 ```
 
 権限を付与して実行：
@@ -577,7 +582,7 @@ sudo systemctl start orgchart-api
 
 ```bash
 # 実行中の Java プロセスを確認（jarファイル名などでフィルタ）
-ps aux | grep orgchart-api.jar
+ps aux | grep orgchart-api-0.0.1-SNAPSHOT.jar
 ```
 
 出力例：
@@ -611,7 +616,7 @@ set -o allexport
 source .env.prod
 set +o allexport
 
-nohup java -jar orgchart-api.jar --spring.profiles.active=prod > app.log 2>&1 &
+nohup java -jar orgchart-api-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > app.log 2>&1 &
 ```
 
 ---
@@ -656,7 +661,7 @@ set -o allexport
 source .env.prod
 set +o allexport
 
-nohup java -jar orgchart-api.jar --spring.profiles.active=prod > app.log 2>&1 &
+nohup java -jar orgchart-api-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > app.log 2>&1 &
 ```
 
 ---
@@ -686,7 +691,7 @@ echo "Starting orgchart-api..."
 set -o allexport
 source .env.prod
 set +o allexport
-nohup java -jar orgchart-api.jar --spring.profiles.active=prod > app.log 2>&1 &
+nohup java -jar orgchart-api-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > app.log 2>&1 &
 echo "Restart complete."
 ```
 

@@ -160,7 +160,43 @@ export default defineConfig({
           collapsed: true,
           items: [
             { text: "Gemini CLI", link: "/code/gemini-cli" },
-            { text: "Tailwind CSSセットアップ", link: "/code/css" },
+            { text: "Graphiti MCP Server ", link: "/code/GraphitiMCPServer" },
+            {
+              text: "Graphiti MCP Server利用手順 ",
+              link: "/code/GraphitiMCPServer02",
+            },
+            {
+              text: "Project_Guidelinesパターン1",
+              link: "/code/Project_Guidelines01",
+            },
+            {
+              text: "Project_Guidelinesパターン2",
+              link: "/code/Project_Guidelines02",
+            },
+            {
+              text: "Graphiti MCP個人ルール",
+              link: "/code/Graphiti_user_rules",
+            },
+            {
+              text: "Next.jsコーダーagent",
+              link: "/code/Next.js_coder",
+            },
+            {
+              text: "SpringBootMbatisコーダーagent",
+              link: "/code/SpringBootMbatis_coder",
+            },
+            {
+              text: "Meet_Claudia導入方法",
+              link: "/code/Meet_Claudia01",
+            },
+            {
+              text: "Meet_Claudia導入実践",
+              link: "/code/Meet_Claudia02",
+            },
+            {
+              text: "Meet Claudia 導入版使用手順",
+              link: "/code/Meet_Claudia03",
+            },
           ],
         },
         {
