@@ -198,6 +198,10 @@ export default defineConfig({
               link: "/code/Meet_Claudia03",
             },
             {
+              text: "Meet Claudia 起動加速",
+              link: "/code/Meet_Claudia06",
+            },
+            {
               text: "別のパソコンにコピーして使う",
               link: "/code/Meet_Claudia04",
             },
